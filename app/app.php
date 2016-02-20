@@ -7,12 +7,15 @@ use Symfony\Component\Debug\ExceptionHandler;
 ErrorHandler::register();
 ExceptionHandler::register();
 
-// Register service providers.
+// Register service providers
 $app->register(new Silex\Provider\DoctrineServiceProvider());
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../views',
 ));
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
-$app['dao.user'] = $app->share(function ($app) {
+// Register services
+/* $app['dao.user'] = $app->share(function ($app) {
     return new Soundify\DAO\UserDAO($app['db']);
 });
+*/
