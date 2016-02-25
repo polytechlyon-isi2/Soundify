@@ -35,9 +35,9 @@ class ProductDAO extends DAO
     }
     
      /**
-     * Return a list of all articles, sorted by category.
+     * Return a list of all product, sorted by category.
      *
-     * @return array A list of all articles.
+     * @return array A list of all product.
      */
     public function findAllByCategory($categoryId) {
         // The associated article is retrieved only once

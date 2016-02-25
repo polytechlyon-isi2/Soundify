@@ -19,7 +19,6 @@ class CategoryDAO extends DAO
         return $categories;
     }
     
- 
     /**
      * Creates a Category object based on a DB row.
      *
