@@ -19,3 +19,13 @@ $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
     return new Soundify\DAO\UserDAO($app['db']);
 });
 */
+
+$app['dao.category'] = $app->share(function ($app) {
+    return new Soundify\DAO\CategoryDAO($app['db']);
+});
+
+$app['dao.product'] = $app->share(function ($app) {
+    $productDAO = new Soundify\DAO\ProductDAO($app['db']);
+    $productDAO->setCategoryDAO($app['dao.category']);
+    return $productDAO;
+});

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Sam 20 Février 2016 à 14:43
+-- Généré le :  Jeu 25 Février 2016 à 11:26
 -- Version du serveur :  10.1.9-MariaDB
 -- Version de PHP :  5.6.15
 
@@ -19,6 +19,47 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `soundify`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `category`
+--
+
+CREATE TABLE `category` (
+  `category_id` int(11) NOT NULL,
+  `category_name` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Contenu de la table `category`
+--
+
+INSERT INTO `category` (`category_id`, `category_name`) VALUES
+(1, 'Sans catégorie');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `product`
+--
+
+CREATE TABLE `product` (
+  `product_id` int(11) NOT NULL,
+  `product_name` text NOT NULL,
+  `product_short_desc` text NOT NULL,
+  `product_long_desc` text NOT NULL,
+  `product_price` float NOT NULL,
+  `product_category` int(11) NOT NULL,
+  `product_image` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Contenu de la table `product`
+--
+
+INSERT INTO `product` (`product_id`, `product_name`, `product_short_desc`, `product_long_desc`, `product_price`, `product_category`, `product_image`) VALUES
+(1, 'Casque', 'Ceci est un casque', 'Ceci est la description d''un casque', 10, 1, 'casque.jpg');
 
 -- --------------------------------------------------------
 
@@ -41,6 +82,18 @@ CREATE TABLE `user` (
 --
 
 --
+-- Index pour la table `category`
+--
+ALTER TABLE `category`
+  ADD PRIMARY KEY (`category_id`);
+
+--
+-- Index pour la table `product`
+--
+ALTER TABLE `product`
+  ADD PRIMARY KEY (`product_id`);
+
+--
 -- Index pour la table `user`
 --
 ALTER TABLE `user`
@@ -50,6 +103,16 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour les tables exportées
 --
 
+--
+-- AUTO_INCREMENT pour la table `category`
+--
+ALTER TABLE `category`
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT pour la table `product`
+--
+ALTER TABLE `product`
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT pour la table `user`
 --

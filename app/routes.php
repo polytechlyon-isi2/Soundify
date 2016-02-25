@@ -13,3 +13,9 @@ $app->get('/', function () use ($app) {
     return $app['twig']->render('article.html.twig', array('article' => $article, 'comments' => $comments));
 })->bind('article');
 */
+
+$app->get('/category/{id}', function ($id) use ($app) {
+    $category = $app['dao.category']->find($id);
+    $products = $app['dao.product']->findAllByCategory($id);
+    return $app['twig']->render('category.html.twig', array('category' => $category, 'products' => $products));
+})->bind('category');
