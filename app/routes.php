@@ -1,4 +1,5 @@
 <?php
+use Symfony\Component\HttpFoundation\Request;
 
 // Home page
 $app->get('/', function () use ($app) {
@@ -19,3 +20,11 @@ $app->get('/category/{id}', function ($id) use ($app) {
     $products = $app['dao.product']->findAllByCategory($id);
     return $app['twig']->render('category.html.twig', array('category' => $category, 'products' => $products,'categories' => $categories));
 })->bind('category');
+
+// Login form
+$app->get('/login', function(Request $request) use ($app) {
+    return $app['twig']->render('login.html.twig', array(
+        'error'         => $app['security.last_error']($request),
+        'last_username' => $app['session']->get('_security.last_username'),
+    ));
+})->bind('login');
