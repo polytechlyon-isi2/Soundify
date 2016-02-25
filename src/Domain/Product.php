@@ -53,7 +53,6 @@ class Product
      */
     private $category;
 
-
     public function getId() {
         return $this->id;
     }
