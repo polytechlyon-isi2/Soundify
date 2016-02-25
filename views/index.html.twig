@@ -1,4 +1,8 @@
-{% extends "layout.html.twig" %} {% block title %}Home{% endblock %} {% block content %}
+{% extends "layout.html.twig" %} {% block title %}Home{% endblock %} {% block menu %} {% for category in categories %}
+<li>
+    <a href="category/{{ category.id }}"><i class=" fa fa-cog "></i>{{ category.name }}</a>
+</li>
+{% endfor %} {% endblock %} {% block content %}
 <article>
     Test
 </article>

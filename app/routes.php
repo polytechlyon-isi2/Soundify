@@ -2,8 +2,8 @@
 
 // Home page
 $app->get('/', function () use ($app) {
-   // $users = $app['dao.user']->findAll();
-    return $app['twig']->render('index.html.twig'/*, array('users' => $users)*/);
+    $categories = $app['dao.category']->findAll();
+    return $app['twig']->render('index.html.twig', array('categories' => $categories));
 })->bind('home');
 
 // Object Details example
