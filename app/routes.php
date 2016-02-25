@@ -15,7 +15,8 @@ $app->get('/', function () use ($app) {
 */
 
 $app->get('/category/{id}', function ($id) use ($app) {
+    $categories = $app['dao.category']->findAll();
     $category = $app['dao.category']->find($id);
     $products = $app['dao.product']->findAllByCategory($id);
-    return $app['twig']->render('category.html.twig', array('category' => $category, 'products' => $products));
+    return $app['twig']->render('category.html.twig', array('category' => $category, 'products' => $products,'categories' => $categories));
 })->bind('category');
