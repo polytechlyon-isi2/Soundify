@@ -6,14 +6,13 @@ $app->get('/', function () use ($app) {
     return $app['twig']->render('index.html.twig', array('categories' => $categories));
 })->bind('home');
 
-// Object Details example
-/*$app->get('/article/{id}', function ($id) use ($app) {
-    $article = $app['dao.article']->find($id);
-    $comments = $app['dao.comment']->findAllByArticle($id);
-    return $app['twig']->render('article.html.twig', array('article' => $article, 'comments' => $comments));
-})->bind('article');
-*/
+// Add category page
+$app->get('/addCategory', function () use ($app) {
+    $categories = $app['dao.category']->findAll();
+    return $app['twig']->render('addCategory.html.twig', array('categories' => $categories));
+})->bind('addCategory');
 
+// Category page
 $app->get('/category/{id}', function ($id) use ($app) {
     $categories = $app['dao.category']->findAll();
     $category = $app['dao.category']->find($id);

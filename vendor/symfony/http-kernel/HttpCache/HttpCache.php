@@ -153,11 +153,33 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
     /**
      * Gets the Surrogate instance.
      *
+     * @throws \LogicException
+     *
      * @return SurrogateInterface A Surrogate instance
      */
     public function getSurrogate()
     {
+        if (!$this->surrogate instanceof Esi) {
+            throw new \LogicException('This instance of HttpCache was not set up to use ESI as surrogate handler. You must overwrite and use createSurrogate');
+        }
+
         return $this->surrogate;
+    }
+
+    /**
+     * Gets the Esi instance.
+     *
+     * @throws \LogicException
+     *
+     * @return Esi An Esi instance
+     *
+     * @deprecated since version 2.6, to be removed in 3.0. Use getSurrogate() instead
+     */
+    public function getEsi()
+    {
+        @trigger_error('The '.__METHOD__.' method is deprecated since version 2.6 and will be removed in 3.0. Use the getSurrogate() method instead.', E_USER_DEPRECATED);
+
+        return $this->getSurrogate();
     }
 
     /**
@@ -255,7 +277,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         // invalidate only when the response is successful
         if ($response->isSuccessful() || $response->isRedirect()) {
             try {
-                $this->store->invalidate($request);
+                $this->store->invalidate($request, $catch);
 
                 // As per the RFC, invalidate Location and Content-Location URLs if present
                 foreach (array('Location', 'Content-Location') as $header) {
@@ -481,7 +503,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         $this->processResponseBody($request, $response);
 
         if ($this->isPrivateRequest($request) && !$response->headers->hasCacheControlDirective('public')) {
-            $response->setPrivate();
+            $response->setPrivate(true);
         } elseif ($this->options['default_ttl'] > 0 && null === $response->getTtl() && !$response->headers->getCacheControlDirective('must-revalidate')) {
             $response->setTtl($this->options['default_ttl']);
         }
@@ -544,7 +566,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
                 $wait += 50000;
             }
 
-            if ($wait < 5000000) {
+            if ($wait < 2000000) {
                 // replace the current entry with the fresh one
                 $new = $this->lookup($request);
                 $entry->headers = $new->headers;
