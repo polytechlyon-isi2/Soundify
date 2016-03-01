@@ -7,6 +7,7 @@ $app->get('/', function () use ($app) {
     return $app['twig']->render('index.html.twig', array('categories' => $categories));
 })->bind('home');
 
+
 // Add category page
 $app->get('/addCategory', function () use ($app) {
     $categories = $app['dao.category']->findAll();
