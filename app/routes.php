@@ -29,3 +29,14 @@ $app->get('/login', function(Request $request) use ($app) {
         'last_username' => $app['session']->get('_security.last_username'),
     ));
 })->bind('login');
+
+// Admin home page
+$app->get('/admin', function() use ($app) {
+    $categories = $app['dao.category']->findAll();
+    $products = $app['dao.product']->findAll();
+    $users = $app['dao.user']->findAll();
+    return $app['twig']->render('admin.html.twig', array(
+        'categories' => $categories,
+        'products' => $products,
+        'users' => $users));
+})->bind('admin');
