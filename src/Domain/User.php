@@ -118,6 +118,9 @@ class User implements UserInterface
         $this->email = $email;
     }
     
+    /**
+     * @inheritDoc
+     */
     public function getPassword() {
         return $this->password;
     }
@@ -126,6 +129,9 @@ class User implements UserInterface
         $this->password = $password;
     }
     
+    /**
+     * @inheritDoc
+     */
     public function getSalt()
     {
         return $this->salt;
