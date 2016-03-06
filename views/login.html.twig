@@ -3,7 +3,8 @@
 {% block content %}
 <h2 class="text-center">{{ block('title') }}</h2> {% if error %}
 <div class="alert alert-danger">
-    <strong>Echec de connexion</strong> {{ error }}
+    <strong>Echec de connexion</strong> {{ error | replace({
+        "Bad credentials": "Nom d'utilisateur/Mot de passe invalide"}) }}
 </div>
 {% endif %}
 <div class="well">
