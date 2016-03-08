@@ -41,7 +41,7 @@
                     <td>{{ product.category.name }}</td>
                     <td>{{ product.price |number_format(2, '.', ',') }}€</td>
                     <td>
-                        <a href="{#{{ path('admin_product_edit', { 'id': product.id }) }}#}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+                        <a href="{{ path('admin_product_edit', { 'id': product.id }) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
                         <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#productDialog{{ product.id }}"><span class="glyphicon glyphicon-remove"></span>
                         </button>
                         <div class="modal fade" id="productDialog{{ product.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -55,7 +55,7 @@
                                         Etes-vous sûr de supprimer ce produit ?                                    </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                                        <a href="{#{{ path('admin_article_delete', { 'id': article.id }) }}#}" class="btn btn-danger">Oui</a>
+                                        <a href="{{ path('admin_product_delete', { 'id': product.id }) }}" class="btn btn-danger">Oui</a>
                                     </div>
                                 </div><!-- /.modal-content -->
                             </div><!-- /.modal-dialog -->
@@ -68,7 +68,7 @@
         {% else %}
         <div class="alert alert-warning">No products found.</div>
         {% endif %}
-        <a href="{#{{ path('admin_product_add') }}#}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter un nouveau produit</button></a>
+        <a href="{{ path('admin_product_add') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter un nouveau produit</button></a>
     </div>
     <div class="tab-pane fade adminTable" id="comments">
         <!-- TODO : insérer ici le code de gestion des commentaires -->

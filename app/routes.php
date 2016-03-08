@@ -1,5 +1,9 @@
 <?php
 use Symfony\Component\HttpFoundation\Request;
+use Silex\Provider\FormServiceProvider;
+
+use Soundify\Domain\Product;
+use Soundify\Form\Type\ProductType;
 
 // Home page
 $app->get('/', function () use ($app) {
@@ -40,3 +44,42 @@ $app->get('/admin', function() use ($app) {
         'products' => $products,
         'users' => $users));
 })->bind('admin');
+
+// Add a new product
+$app->match('/admin/product/add', function(Request $request) use ($app) {
+    $product = new Product();
+    $categories = $app['dao.category']->findAll();
+    $productForm = $app['form.factory']->create(new ProductType($categories), $product);
+    $productForm->handleRequest($request);
+    if ($productForm->isSubmitted() && $productForm->isValid()) {
+        $app['dao.product']->save($product);
+        $app['session']->getFlashBag()->add('success', 'The product was successfully created.');
+    }
+    return $app['twig']->render('product_form.html.twig', array(
+        'title' => 'Nouveau Produit',
+        'productForm' => $productForm->createView()));
+})->bind('admin_product_add');
+
+// Edit an existing product
+$app->match('/admin/product/{id}/edit', function($id, Request $request) use ($app) {
+    $product = $app['dao.product']->find($id);
+    $categories = $app['dao.category']->findAll();
+    $productForm = $app['form.factory']->create(new ProductType($categories), $product);
+    $productForm->handleRequest($request);
+    if ($productForm->isSubmitted() && $productForm->isValid()) {
+        $app['dao.product']->save($product);
+        $app['session']->getFlashBag()->add('success', 'The product was succesfully updated.');
+    }
+    return $app['twig']->render('product_form.html.twig', array(
+        'title' => 'Edit product',
+        'productForm' => $productForm->createView()));
+})->bind('admin_product_edit');
+
+// Remove an product
+$app->get('/admin/product/{id}/delete', function($id, Request $request) use ($app) {
+    // Delete the product
+    $app['dao.product']->delete($id);
+    $app['session']->getFlashBag()->add('success', 'The product was succesfully removed.');
+    // Redirect to admin home page
+    return $app->redirect($app['url_generator']->generate('admin'));
+})->bind('admin_product_delete');

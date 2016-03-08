@@ -9,6 +9,7 @@ ErrorHandler::register();
 ExceptionHandler::register();
 
 // Register service providers
+
 $app->register(new Silex\Provider\DoctrineServiceProvider());
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../views',
@@ -40,6 +41,9 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     ),
 ));
 
+
+$app->register(new Silex\Provider\FormServiceProvider());
+$app->register(new Silex\Provider\TranslationServiceProvider());
 // Register services
 /* $app['dao.user'] = $app->share(function ($app) {
     return new Soundify\DAO\UserDAO($app['db']);
