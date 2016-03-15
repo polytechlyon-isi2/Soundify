@@ -17,11 +17,11 @@ class ProductType extends AbstractType
     {
         $builder
             ->add('name', 'text',array('label'=>'Nom : '))
-            ->add('shortdescription','textarea')
-            ->add('longdescription', 'textarea')
-            ->add('price', 'text')
-            ->add('image', 'text')
-            ->add('category', 'choice', array('expanded'=>false, 'multiple'=>false,'choices'=>$this->categories));
+            ->add('shortdescription','textarea',array('label'=>'Présentation : '))
+            ->add('longdescription', 'textarea',array('label'=>'Description détaillée : '))
+            ->add('price','number',array('label'=>'Prix : '))
+            ->add('image', 'text',array('label'=>'Image : '))
+            ->add('category', 'choice', array('expanded'=>false, 'multiple'=>false,'choices'=>$this->categories,'label'=>'Catégorie : '));
     }
 
     public function getName()
