@@ -26,6 +26,24 @@ class UserDAO extends DAO implements UserProviderInterface
         else
             throw new \Exception("No user matching id " . $id);
     }
+    
+    /**
+     * Returns a list of all users, sorted by role and name.
+     *
+     * @return array A list of all users.
+     */
+    public function findAll() {
+        $sql = "select * from user order by user_role, user_name";
+        $result = $this->getDb()->fetchAll($sql);
+
+        // Convert query result to an array of domain objects
+        $entities = array();
+        foreach ($result as $row) {
+            $id = $row['user_id'];
+            $entities[$id] = $this->buildDomainObject($row);
+        }
+        return $entities;
+    }
 
     /**
      * {@inheritDoc}
@@ -70,7 +88,7 @@ class UserDAO extends DAO implements UserProviderInterface
     protected function buildDomainObject($row) {
         $user = new User();
         $user->setId($row['user_id']);
-        $user->setName($row['user_name']);
+        $user->setUsername($row['user_name']);
         $user->setFirstname($row['user_firstname']);
         $user->setAddress($row['user_address']);
         $user->setZipCode($row['user_zipcode']);

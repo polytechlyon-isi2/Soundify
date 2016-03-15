@@ -100,4 +100,41 @@ class ProductDAO extends DAO
         else
             throw new \Exception("No product matching id " . $id);
     }
+    
+     /**
+     * Saves an product into the database.
+     *
+     * @param \MicroCMS\Domain\Product product The product to save
+     */
+    public function save(Product $product) {
+        $productData = array(
+            'product_name' => $product->getName(),
+            'product_short_desc' => $product->getShortDescription(),
+            'product_long_desc' => $product->getLongDescription(),
+            'product_price' => $product->getPrice(),
+            'product_category' => $product->getCategory(),
+            'product_image' => $product->getImage(),
+            );
+
+        if ($product->getId()) {
+            // The article has already been saved : update it
+            $this->getDb()->update('product', $productData, array('product_id' => $product->getId()));
+        } else {
+            // The article has never been saved : insert it
+            $this->getDb()->insert('product', $productData);
+            // Get the id of the newly created article and set it on the entity.
+            $id = $this->getDb()->lastInsertId();
+            $product->setId($id);
+        }
+    }
+
+    /**
+     * Removes an article from the database.
+     *
+     * @param integer $id The product id.
+     */
+    public function delete($id) {
+        // Delete the product
+        $this->getDb()->delete('product', array('product_id' => $id));
+    }
 }

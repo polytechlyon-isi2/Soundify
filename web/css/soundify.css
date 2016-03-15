@@ -7,3 +7,8 @@ body {
     padding-top: 10px;
     text-align: center;
 }
+
+.adminTable {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
