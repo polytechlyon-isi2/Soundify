@@ -63,3 +63,14 @@ $app['dao.product'] = $app->share(function ($app) {
     $productDAO->setCategoryDAO($app['dao.category']);
     return $productDAO;
 });
+
+$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
+    $twig->addFunction(new \Twig_SimpleFunction('asset', function ($asset) use ($app) {
+        return sprintf('%s/%s',
+            $app['request']->getBasePath(),
+            ltrim($asset, '/')
+        );
+    }));
+
+    return $twig;
+}));
