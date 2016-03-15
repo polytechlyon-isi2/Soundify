@@ -104,7 +104,7 @@ class ProductDAO extends DAO
      /**
      * Saves an product into the database.
      *
-     * @param \MicroCMS\Domain\Product product The product to save
+     * @param \Soundify\Domain\Product product The product to save
      */
     public function save(Product $product) {
         $productData = array(
@@ -122,14 +122,14 @@ class ProductDAO extends DAO
         } else {
             // The article has never been saved : insert it
             $this->getDb()->insert('product', $productData);
-            // Get the id of the newly created article and set it on the entity.
+            // Get the id of the newly created product and set it on the entity.
             $id = $this->getDb()->lastInsertId();
             $product->setId($id);
         }
     }
 
     /**
-     * Removes an article from the database.
+     * Removes an product from the database.
      *
      * @param integer $id The product id.
      */

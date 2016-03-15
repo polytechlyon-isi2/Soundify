@@ -5,6 +5,8 @@ use Silex\Provider\FormServiceProvider;
 use Soundify\Domain\Product;
 use Soundify\Form\Type\ProductType;
 
+use Soundify\Domain\Category;
+use Soundify\Form\Type\CategoryType;
 // Home page
 $app->get('/', function () use ($app) {
     $categories = $app['dao.category']->findAll();
@@ -53,7 +55,7 @@ $app->match('/admin/product/add', function(Request $request) use ($app) {
     $productForm->handleRequest($request);
     if ($productForm->isSubmitted() && $productForm->isValid()) {
         $app['dao.product']->save($product);
-        $app['session']->getFlashBag()->add('success', 'The product was successfully created.');
+        $app['session']->getFlashBag()->add('success', 'Le produit "'. $product->getName() . '" a bien été créé.');
     }
     return $app['twig']->render('product_form.html.twig', array(
         'title' => 'Nouveau Produit',
@@ -68,10 +70,10 @@ $app->match('/admin/product/{id}/edit', function($id, Request $request) use ($ap
     $productForm->handleRequest($request);
     if ($productForm->isSubmitted() && $productForm->isValid()) {
         $app['dao.product']->save($product);
-        $app['session']->getFlashBag()->add('success', 'The product was succesfully updated.');
+        $app['session']->getFlashBag()->add('success', 'Le produit "'. $category->getName() . '" a bien été mis à jour.');
     }
     return $app['twig']->render('product_form.html.twig', array(
-        'title' => 'Edit product',
+        'title' => 'Edition du produit',
         'productForm' => $productForm->createView()));
 })->bind('admin_product_edit');
 
@@ -79,7 +81,44 @@ $app->match('/admin/product/{id}/edit', function($id, Request $request) use ($ap
 $app->get('/admin/product/{id}/delete', function($id, Request $request) use ($app) {
     // Delete the product
     $app['dao.product']->delete($id);
-    $app['session']->getFlashBag()->add('success', 'The product was succesfully removed.');
+    $app['session']->getFlashBag()->add('success', 'Le produit a bien été supprimé.');
     // Redirect to admin home page
     return $app->redirect($app['url_generator']->generate('admin'));
 })->bind('admin_product_delete');
+
+// Add a new category
+$app->match('/admin/category/add', function(Request $request) use ($app) {
+    $category = new Category();
+    $categoryForm = $app['form.factory']->create(new CategoryType(), $category);
+    $categoryForm->handleRequest($request);
+    if ($categoryForm->isSubmitted() && $categoryForm->isValid()) {
+        $app['dao.category']->save($category);
+        $app['session']->getFlashBag()->add('success', 'La catégorie "'. $category->getName() . '" a bien été créée.');
+    }
+    return $app['twig']->render('category_form.html.twig', array(
+        'title' => 'Nouvelle catégorie',
+        'categoryForm' => $categoryForm->createView()));
+})->bind('admin_category_add');
+
+// Edit an existing product
+$app->match('/admin/category/{id}/edit', function($id, Request $request) use ($app) {
+    $category = $app['dao.category']->find($id);
+    $categoryForm = $app['form.factory']->create(new CategoryType(), $category);
+    $categoryForm->handleRequest($request);
+    if ($categoryForm->isSubmitted() && $categoryForm->isValid()) {
+        $app['dao.category']->save($category);
+        $app['session']->getFlashBag()->add('success', 'La catégorie "'. $category->getName() . '" a bien été mise à jour.');
+    }
+    return $app['twig']->render('category_form.html.twig', array(
+        'title' => 'Edition de la catégorie',
+        'categoryForm' => $categoryForm->createView()));
+})->bind('admin_category_edit');
+
+// Remove an product
+$app->get('/admin/category/{id}/delete', function($id, Request $request) use ($app) {
+    // Delete the category
+    $app['dao.category']->delete($id);
+    $app['session']->getFlashBag()->add('success', 'La catégorie a bien été supprimée.');
+    // Redirect to admin home page
+    return $app->redirect($app['url_generator']->generate('admin'));
+})->bind('admin_category_delete');

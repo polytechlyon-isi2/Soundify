@@ -10,22 +10,24 @@ class ProductType extends AbstractType
     public $categories;
     public function __construct($categories)
     {
-        foreach ($categories as $id => $category) {
-            $cle = $category->__toString();
-             $this->categories[$cle] = $id;
-        }
+        $this->categories = $categories;
     }
-    
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $choices = array();
+        foreach ($this->categories as $id => $category) {
+            $cle = $category->__toString();
+            $choices[$cle] = $id;
+        }
         $builder
             ->add('name', 'text',array('label'=>'Nom : '))
             ->add('shortdescription','textarea',array('label'=>'Présentation : '))
             ->add('longdescription', 'textarea',array('label'=>'Description détaillée : '))
             ->add('price','number',array('label'=>'Prix : '))
             ->add('image', 'text',array('label'=>'Image : '))
-            ->add('category', 'choice', array('expanded'=>false, 'multiple'=>false,'choices'=>$this->categories,'choice_value' => function ($category) {
-                    return $category;
+            ->add('category', 'choice', array('expanded'=>false,'multiple'=>false,'choices'=>$choices,'choice_value' => function ($choice) {
+                    return $choice;
                 },'choices_as_values'=>true,'label'=>'Catégorie : '));
     }
 

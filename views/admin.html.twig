@@ -13,14 +13,14 @@
 <div class="row">
     <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
         <ul class="nav nav-tabs nav-justified">
-            <li class="active"><a href="#articles" data-toggle="tab">Produits</a></li>
-            <li><a href="#comments" data-toggle="tab">Categories</a></li>
+            <li class="active"><a href="#products" data-toggle="tab">Produits</a></li>
+            <li><a href="#categories" data-toggle="tab">Catégories</a></li>
             <li><a href="#users" data-toggle="tab">Utilisateurs</a></li>
         </ul>
     </div>
 </div>
 <div class="tab-content">
-    <div class="tab-pane fade in active adminTable" id="articles">
+    <div class="tab-pane fade in active adminTable" id="products">
         {% if products %}
         <div class="table-responsive">
             <table class="table table-hover table-condensed">
@@ -70,9 +70,49 @@
         {% endif %}
         <a href="{{ path('admin_product_add') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter un nouveau produit</button></a>
     </div>
-    <div class="tab-pane fade adminTable" id="comments">
-        <!-- TODO : insérer ici le code de gestion des commentaires -->
-    </div>
+    <div class="tab-pane fade adminTable" id="categories">
+        {% if categories %}
+        <div class="table-responsive">
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th></th>  <!-- Actions column -->
+                    </tr>
+                </thead>
+                {% for category in categories %}
+                <tr>
+                    <td>
+                        <a class="categoryTitle" href="{#{{ path('category', { 'id': category.id }) }}#}" > {{ category.name }}</a></td>
+                    <td>
+                        <a href="{{ path('admin_category_edit', { 'id': category.id }) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+                        <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#categoryDialog{{ category.id }}"><span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <div class="modal fade" id="categoryDialog{{ category.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Confirmation de suppression</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Etes-vous sûr de supprimer cette catégorie ?                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                                        <a href="{{ path('admin_category_delete', { 'id': category.id }) }}" class="btn btn-danger">Oui</a>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-warning">No products found.</div>
+        {% endif %}
+        <a href="{{ path('admin_category_add') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter une nouvelle catégorie</button></a>    </div>
     <div class="tab-pane fade adminTable" id="users">
         <!-- TODO : insérer ici le code de gestion des utilisateurs -->
     </div>

@@ -74,7 +74,7 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
 
     return $twig;
 }));
-
+/*
 $app->error(function (\Exception $e, $code) use ($app) {
     switch ($code) {
         case 403:
@@ -87,4 +87,4 @@ $app->error(function (\Exception $e, $code) use ($app) {
             $message = "Something went wrong.";
     }
     return $app['twig']->render('error.html.twig', array('message' => $message));
-});
+});*/
