@@ -7,9 +7,10 @@
     <p>
         <h2>{{ category.name }}</h2>
         <h3>Products</h3> {% for product in products %}
+        <img src="{{asset('/web/img/'~product.image)}}">
         <strong>{{ product.name }}</strong>
         <strong>{{ product.shortdescription }}</strong>
-        <strong>{{ product.longdescription }}</strong>
+        <strong>{{ product.longdescription }} {{ product.image }}</strong>
         <strong>{{ product.price }}</strong>
         <br> {% else %} No products yet. {% endfor %}
     </p>
