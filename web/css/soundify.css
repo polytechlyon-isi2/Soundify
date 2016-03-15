@@ -12,3 +12,14 @@ body {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+.titre{
+    text-align: center;
+    color: cornflowerblue;
+    font-size: 400%;    
+}
+
+.sous-titre{
+    text-align: left;
+    color: mediumslateblue;
+}

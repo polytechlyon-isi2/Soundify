@@ -4,15 +4,20 @@
 </li>
 {% endfor %} {% endblock %}{% block content %}
 <article>
-    <p>
-        <h2>{{ category.name }}</h2>
-        <h3>Products</h3> {% for product in products %}    
-        <img src="{{asset('/img/'~product.image)}}" alt="Image!">
-        <strong>{{ product.name }}</strong>
-        <strong>{{ product.shortdescription }}</strong>
-        <strong>{{ product.longdescription }} {{ product.image }}</strong>
-        <strong>{{ product.price }}</strong>
-        <br> {% else %} No products yet. {% endfor %}
-    </p>
+    <h1 class="titre">{{ category.name }}</h1>
+    <h2 class="sous-titre">Products</h2> 
+    {% for product in products %}   
+    <div class="jumbotron"> 
+        <div class="row">
+            <div class="col-md-2">
+                <img src="{{asset('/img/'~product.image)}}" alt="Image!" class="img-thumbnail" width=150>
+            </div>
+            <h3>{{ product.name }}</h3>
+
+            <strong>{{ product.shortdescription }}</strong>
+            <strong>{{ product.price }}</strong>
+        </div>
+    </div>       
+    {% else %} No products yet. {% endfor %}
 </article>
 {% endblock %}
