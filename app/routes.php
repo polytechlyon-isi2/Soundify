@@ -4,13 +4,20 @@ use Silex\Provider\FormServiceProvider;
 
 use Soundify\Domain\Product;
 use Soundify\Form\Type\ProductType;
-
 use Soundify\Domain\Category;
 use Soundify\Form\Type\CategoryType;
+use Soundify\Domain\User;
+use Soundify\Form\Type\UserType;
+
 // Home page
-$app->get('/', function () use ($app) {
+$app->get('/', function (Request $request) use ($app) {
     $categories = $app['dao.category']->findAll();
-    return $app['twig']->render('index.html.twig', array('categories' => $categories));
+    //return $app['twig']->render('index.html.twig', array('categories' => $categories));
+    return $app['twig']->render('index.html.twig', array(
+        'error'         => $app['security.last_error']($request),
+        'last_username' => $app['session']->get('_security.last_username'),
+        'categories' => $categories,
+    ));
 })->bind('home');
 
 
@@ -122,3 +129,57 @@ $app->get('/admin/category/{id}/delete', function($id, Request $request) use ($a
     // Redirect to admin home page
     return $app->redirect($app['url_generator']->generate('admin'));
 })->bind('admin_category_delete');
+
+// Add a user
+$app->match('/admin/user/add', function(Request $request) use ($app) {
+    $user = new User();
+    $userForm = $app['form.factory']->create(new UserType(), $user);
+    $userForm->handleRequest($request);
+    if ($userForm->isSubmitted() && $userForm->isValid()) {
+        // generate a random salt value
+        $salt = substr(md5(time()), 0, 23);
+        $user->setSalt($salt);
+        $plainPassword = $user->getPassword();
+        // find the default encoder
+        $encoder = $app['security.encoder.digest'];
+        // compute the encoded password
+        $password = $encoder->encodePassword($plainPassword, $user->getSalt());
+        $user->setPassword($password); 
+        $app['dao.user']->save($user);
+        $app['session']->getFlashBag()->add('success', 'L\'utilisateur "'. $user->getName() . " " . $user->getFirstname() . '" a bien été créé.');
+    }
+    return $app['twig']->render('user_form.html.twig', array(
+        'title' => 'Nouvel utilisateur',
+        'userForm' => $userForm->createView()));
+})->bind('admin_user_add');
+
+// Edit an existing user
+$app->match('/admin/user/{id}/edit', function($id, Request $request) use ($app) {
+    $user = $app['dao.user']->find($id);
+    $userForm = $app['form.factory']->create(new UserType(), $user);
+    $userForm->handleRequest($request);
+    if ($userForm->isSubmitted() && $userForm->isValid()) {
+        $plainPassword = $user->getPassword();
+        // find the encoder for the user
+        $encoder = $app['security.encoder_factory']->getEncoder($user);
+        // compute the encoded password
+        $password = $encoder->encodePassword($plainPassword, $user->getSalt());
+        $user->setPassword($password); 
+        $app['dao.user']->save($user);
+        $app['session']->getFlashBag()->add('success', 'L\'utilisateur '. $user->getName() . " " . $user->getFirstname() . '" a bien été mis à jour.');
+    }
+    return $app['twig']->render('user_form.html.twig', array(
+        'title' => 'Edition de l\'utilisateur',
+        'userForm' => $userForm->createView()));
+})->bind('admin_user_edit');
+
+// Remove a user
+$app->get('/admin/user/{id}/delete', function($id, Request $request) use ($app) {
+    // Delete all associated comments
+    $app['dao.comment']->deleteAllByUser($id);
+    // Delete the user
+    $app['dao.user']->delete($id);
+    $app['session']->getFlashBag()->add('success', 'L\'utilisateur a bien été supprimé.');
+    // Redirect to admin home page
+    return $app->redirect($app['url_generator']->generate('admin'));
+})->bind('admin_user_delete');

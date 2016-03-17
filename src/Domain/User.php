@@ -78,14 +78,12 @@ class User implements UserInterface
         $this->id = $id;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getUsername() {
+    
+    public function getName() {
         return $this->name;
     }
 
-    public function setUsername($name) {
+    public function setName($name) {
         $this->name = $name;
     }
 
@@ -113,11 +111,14 @@ class User implements UserInterface
         $this->zipcode = $zipcode;
     }
     
-    public function getEmail() {
+    /**
+     * @inheritDoc
+     */
+    public function getUsername() {
         return $this->email;
     }
 
-    public function setEmail($email) {
+    public function setUsername($email) {
         $this->email = $email;
     }
     
@@ -153,9 +154,6 @@ class User implements UserInterface
     public function setRole($role) {
         $this->role = $role;
     }
-    
-    
-
 
     /**
      * @inheritDoc

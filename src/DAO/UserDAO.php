@@ -33,7 +33,7 @@ class UserDAO extends DAO implements UserProviderInterface
      * @return array A list of all users.
      */
     public function findAll() {
-        $sql = "select * from user order by user_role, user_name";
+        $sql = "select * from user order by user_role, user_mail";
         $result = $this->getDb()->fetchAll($sql);
 
         // Convert query result to an array of domain objects
@@ -50,7 +50,7 @@ class UserDAO extends DAO implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        $sql = "select * from user where user_name=?";
+        $sql = "select * from user where user_mail=?";
         $row = $this->getDb()->fetchAssoc($sql, array($username));
 
         if ($row)
@@ -78,6 +78,46 @@ class UserDAO extends DAO implements UserProviderInterface
     {
         return 'Soundify\Domain\User' === $class;
     }
+    
+    /**
+     * Saves a user into the database.
+     *
+     * @param \MicroCMS\Domain\User $user The user to save
+     */
+    public function save(User $user) {
+        $userData = array(
+            'user_name' => $user->getName(),
+            'user_firstname' => $user->getFirstname(),
+            'user_mail' => $user->getUsername(),
+            'user_zipcode' => $user->getZipcode(),
+            'user_address' => $user->getAddress(),
+            'user_salt' => $user->getSalt(),
+            'user_password' => $user->getPassword(),
+            'user_role' => $user->getRole()
+            );
+
+        if ($user->getId()) {
+            // The user has already been saved : update it
+            $this->getDb()->update('user', $userData, array('user_id' => $user->getId()));
+        } else {
+            // The user has never been saved : insert it
+            $this->getDb()->insert('user', $userData);
+            // Get the id of the newly created user and set it on the entity.
+            $id = $this->getDb()->lastInsertId();
+            $user->setId($id);
+        }
+    }
+
+    /**
+     * Removes a user from the database.
+     *
+     * @param @param integer $id The user id.
+     */
+    public function delete($id) {
+        // Delete the user
+        $this->getDb()->delete('user', array('user_id' => $id));
+    }
+
 
     /**
      * Creates a User object based on a DB row.
@@ -88,11 +128,11 @@ class UserDAO extends DAO implements UserProviderInterface
     protected function buildDomainObject($row) {
         $user = new User();
         $user->setId($row['user_id']);
-        $user->setUsername($row['user_name']);
+        $user->setName($row['user_name']);
+        $user->setUsername($row['user_mail']);
         $user->setFirstname($row['user_firstname']);
         $user->setAddress($row['user_address']);
         $user->setZipCode($row['user_zipcode']);
-        $user->setEmail($row['user_mail']);
         $user->setPassword($row['user_password']);
         $user->setSalt($row['user_salt']);
         $user->setRole($row['user_role']);
