@@ -13,8 +13,8 @@ class UserType extends AbstractType
             ->add('name', 'text',array('label'=>'Nom : '))
             ->add('firstname', 'text',array('label'=>'Prénom : '))
             ->add('address', 'text',array('label'=>'Adresse : '))
-            ->add('zipcode', 'text',array('label'=>'Code Postal : '))
-            ->add('username', 'text',array('label'=>'Email (identifiant de connexion) : '))
+            ->add('zipcode', 'text',array('label'=>'Code Postal : ', 'max_length' => 5))
+            ->add('username', 'email',array('label'=>'Email (identifiant de connexion) : '))
             ->add('password', 'repeated', array(
                 'type'            => 'password',
                 'invalid_message' => 'The password fields must match.',
