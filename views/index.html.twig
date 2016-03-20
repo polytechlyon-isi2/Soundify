@@ -43,8 +43,14 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="well">
-                    <h3 class="text-center"><strong>Votre compte</strong></h3> 
+                <div class="well text-center">
+                    <h3><strong>Votre compte</strong></h3> 
+                    <p> 
+                        Vous êtes actuellement connecté sous le nom de <strong>{{ app.user.name }} {{ app.user.firstname }}</strong> résidant à <strong>{{ app.user.address }} ({{ app.user.zipcode }})</strong>
+                    </p>
+                    <a class="btn btn-info" type="button" href={{ path('myaccount') }}>
+                        <span class="glyphicon glyphicon-pencil"></span> Modifier votre compte
+                    </a>
                 </div>
             </div>
         </div>

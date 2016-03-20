@@ -206,3 +206,23 @@ $app->match('/signup', function(Request $request) use ($app) {
         'title' => 'Inscription',
         'userForm' => $userForm->createView()));
 })->bind('sign_up');
+
+// New user
+$app->match('/myaccount', function(Request $request) use ($app) {
+    $user = $app['dao.user']->find($app['user']->getId());
+    $userForm = $app['form.factory']->create(new UserType(), $user);
+    $userForm->handleRequest($request);
+    if ($userForm->isSubmitted() && $userForm->isValid()) {
+        $plainPassword = $user->getPassword();
+        // find the encoder for the user
+        $encoder = $app['security.encoder_factory']->getEncoder($user);
+        // compute the encoded password
+        $password = $encoder->encodePassword($plainPassword, $user->getSalt());
+        $user->setPassword($password); 
+        $app['dao.user']->save($user);
+        $app['session']->getFlashBag()->add('success', 'Votre compte a bien été mis à jour.');
+    }
+    return $app['twig']->render('user_form.html.twig', array(
+        'title' => 'Modifier mon compte',
+        'userForm' => $userForm->createView()));
+})->bind('myaccount');
