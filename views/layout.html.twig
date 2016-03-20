@@ -37,7 +37,7 @@
                             </li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
-                            {% if app.user and is_granted('ROLE_USER') %}
+                            {% if app.user and is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN') %}
                             <li>
                                 <a>
                                     <button class="btn btn-info btn-xs" type="button" >

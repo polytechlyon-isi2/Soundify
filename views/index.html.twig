@@ -5,6 +5,7 @@
 {% endfor %} {% endblock %} {% block content %}
 <article>
     {% if app.user and is_granted('IS_AUTHENTICATED_FULLY') %}
+    {% if not is_granted('ROLE_ADMIN') %}
     <div class="container">
         <div class="well">
             <h2 class="text-center">Accédez à votre <strong>SOUNDIFY</strong> </h2> 
@@ -48,6 +49,8 @@
             </div>
         </div>
     </div>
+    {% else %}
+    {% endif %}
     {% else %}
     <div class="container">
         <div class="row">
