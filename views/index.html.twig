@@ -10,9 +10,8 @@
         <div class="well">
             <h2 class="text-center">Accédez à votre <strong>SOUNDIFY</strong> </h2> 
             <p class="text-center"> 
-                Vous cherchez un casque de qualité, une enceinte qui ne déforme pas la musique ou
-                un home-cinema digne de ce nom ?
-                Découvrez <strong>Soundify</strong> et inscrivez-vous de suite pour profiter d'<strong>offres exceptionnelles</strong> !
+                Bienvenue dans le monde de <strong>Soundify</strong> ! En quelques clics, découvrez l'univers de notre site internet !
+                <strong>N'attendez plus </strong>
             </p> 
         </div>
         <div class="row">
@@ -33,12 +32,10 @@
                 <div class="well text-center">
                     <h3><strong>Votre panier</strong></h3> 
                     <p> 
-                        Vous cherchez un casque de qualité, une enceinte qui ne déforme pas la musique ou
-                        un home-cinema digne de ce nom ?
-                        Découvrez <strong>Soundify</strong> et inscrivez-vous de suite pour profiter d'<strong>offres exceptionnelles</strong> !
+                        Aucun produit ne se trouve actuellement dans votre panier !
                     </p> 
                     <button class="btn btn-info" type="button" >
-                        <span class="glyphicon glyphicon-shopping-cart"></span> Accedez au panier
+                        <span class="glyphicon glyphicon-shopping-cart"></span> Accéder au panier
                     </button>
                 </div>
             </div>
@@ -48,9 +45,16 @@
                     <p> 
                         Vous êtes actuellement connecté sous le nom de <strong>{{ app.user.name }} {{ app.user.firstname }}</strong> résidant à <strong>{{ app.user.address }} ({{ app.user.zipcode }})</strong>
                     </p>
-                    <a class="btn btn-info" type="button" href={{ path('myaccount') }}>
-                        <span class="glyphicon glyphicon-pencil"></span> Modifier votre compte
-                    </a>
+                    <p>
+                        <a class="btn btn-info" type="button" href={{ path('myaccount') }}>
+                            <span class="glyphicon glyphicon-pencil"></span> Modifier votre compte
+                        </a>
+                    </p>
+                    <p>
+                        <a class="btn btn-danger" type="button" href={{ path('logout') }}>
+                            <span class="glyphicon glyphicon-pencil"></span> Se déconnecter
+                        </a>
+                    </p>
                 </div>
             </div>
         </div>
