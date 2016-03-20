@@ -37,6 +37,15 @@
                             </li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
+                            {% if app.user and is_granted('ROLE_USER') %}
+                            <li>
+                                <a>
+                                    <button class="btn btn-info btn-xs" type="button" >
+                                        <span class="glyphicon glyphicon-shopping-cart"></span> Votre Panier <span class="badge">0</span>
+                                    </button>
+                                </a>
+                            </li>
+                            {% endif %}
                             {% if app.user and is_granted('ROLE_ADMIN') %}
                             <li class="{% if adminMenu is defined %}active{% endif %}"><a href="{{ path('admin') }}"><span class="glyphicon glyphicon-cog"></span> Administration</a></li>
                             {% endif %}
@@ -65,7 +74,9 @@
             </nav>
             <div id="content">{% block content %}{% endblock %}</div>
             <footer class="footer">
-                -
+                <div class="container">
+                    <p class="center"><span class="glyphicon glyphicon-copyright-mark"></span> {{ "now"|date("M Y") }} - Soundify</p>
+                </div>
             </footer>
         </div>
     </body>
