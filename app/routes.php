@@ -12,7 +12,6 @@ use Soundify\Form\Type\UserType;
 // Home page
 $app->get('/', function (Request $request) use ($app) {
     $categories = $app['dao.category']->findAll();
-    //return $app['twig']->render('index.html.twig', array('categories' => $categories));
     return $app['twig']->render('index.html.twig', array(
         'error'         => $app['security.last_error']($request),
         'last_username' => $app['session']->get('_security.last_username'),

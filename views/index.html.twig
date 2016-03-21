@@ -91,7 +91,7 @@
                     <form class="form-signin form-horizontal" role="form" action="{{ path('login_check') }}" method="post">
                         <div class="form-group">
                             <div class="col-sm-6 col-sm-offset-3 col-md-8 col-md-offset-2">
-                                <input type="text" name="_username" value="{{ last_username }}" class="form-control" placeholder="Entrez votre nom d'utilisateur" required autofocus>
+                                <input type="email" name="_username" value="{{ last_username }}" class="form-control" placeholder="Entrez votre nom d'utilisateur" required autofocus>
                             </div>
                         </div>
                         <div class="form-group">
@@ -111,4 +111,25 @@
     </div>
     {% endif %}
 </article>
+<div class="carousel slide" data-ride="carousel" data-type="multi" data-interval="5000" id="myCarousel">
+    <div class="carousel-inner">
+        {% for category in categories %} 
+        {% if category.id==1 %}
+        <div class="item active">
+            <div class="col-md-3">
+                <a href="/category/{{ category.id }}"><h4 class="well text-center">{{ category.name }}</h4></a>
+            </div>
+        </div>
+        {% else %}
+        <div class="item">
+            <div class="col-md-3">
+                <a href="/category/{{ category.id }}"><h4 class="well text-center">{{ category.name }}</h4></a>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+   </div>
 {% endblock %}
+
+
