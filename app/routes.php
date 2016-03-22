@@ -8,6 +8,7 @@ use Soundify\Domain\Category;
 use Soundify\Form\Type\CategoryType;
 use Soundify\Domain\User;
 use Soundify\Form\Type\UserType;
+use Soundify\Domain\Cart;
 
 // Home page
 $app->get('/', function (Request $request) use ($app) {
@@ -76,7 +77,7 @@ $app->match('/admin/product/{id}/edit', function($id, Request $request) use ($ap
     $productForm->handleRequest($request);
     if ($productForm->isSubmitted() && $productForm->isValid()) {
         $app['dao.product']->save($product);
-        $app['session']->getFlashBag()->add('success', 'Le produit "'. $category->getName() . '" a bien été mis à jour.');
+        $app['session']->getFlashBag()->add('success', 'Le produit "'. $product->getName() . '" a bien été mis à jour.');
     }
     return $app['twig']->render('product_form.html.twig', array(
         'title' => 'Edition du produit',
@@ -225,3 +226,11 @@ $app->match('/myaccount', function(Request $request) use ($app) {
         'title' => 'Modifier mon compte',
         'userForm' => $userForm->createView()));
 })->bind('myaccount');
+
+
+// Cart page
+$app->get('/cart', function() use ($app) {
+    $cart = $app['dao.cart']->findAllByCategory($app['user']->getId());
+    return $app['twig']->render('cart.html.twig', array(
+        'cart' => $cart ));
+})->bind('cart');

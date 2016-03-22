@@ -64,6 +64,14 @@ $app['dao.product'] = $app->share(function ($app) {
     return $productDAO;
 });
 
+
+$app['dao.cart'] = $app->share(function ($app) {
+    $cartDAO = new Soundify\DAO\CartDAO($app['db']);
+    $cartDAO->setProductDAO($app['dao.product']);
+    $cartDAO->setUserDAO($app['dao.user']);
+    return $cartDAO;
+});
+
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $twig->addFunction(new \Twig_SimpleFunction('asset', function ($asset) use ($app) {
         return sprintf('%s/%s',
