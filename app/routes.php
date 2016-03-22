@@ -35,6 +35,13 @@ $app->get('/category/{id}', function ($id) use ($app) {
     return $app['twig']->render('category.html.twig', array('category' => $category, 'products' => $products,'categories' => $categories));
 })->bind('category');
 
+// Product page
+$app->get('/product/{id}', function ($id) use ($app) {
+    $categories = $app['dao.category']->findAll();
+    $product = $app['dao.product']->find($id);
+    return $app['twig']->render('product.html.twig', array('categories' => $categories, 'product' => $product));
+})->bind('product');
+
 // Login form
 $app->get('/login', function(Request $request) use ($app) {
     return $app['twig']->render('login.html.twig', array(
