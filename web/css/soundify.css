@@ -47,3 +47,19 @@ body {
 	.carousel-inner .next        { left:  25%; }
 	.carousel-inner .prev		 { left: -25%; }	
 }
+
+.jumbotron
+{
+    
+}
+
+.thumbnail
+{
+    background-color: aliceblue;
+    border-color: lightgrey;
+}
+
+.badge
+{
+    background-color: cornflowerblue;
+}

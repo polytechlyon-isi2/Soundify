@@ -3,21 +3,33 @@
     <a href="/category/{{ category.id }}"><i class=" fa fa-cog "></i>{{ category.name }}</a>
 </li>
 {% endfor %} {% endblock %}{% block content %}
-<article>
+<article>   
     <h1 class="titre">{{ category.name }}</h1>
-    <h2 class="sous-titre">Products</h2> 
+    {% set cpt = 1 %}
     {% for product in products %}   
-    <div class="jumbotron"> 
+        {% if cpt%3==0 %}
         <div class="row">
-            <div class="col-md-2">
-                <img src="{{asset('/img/'~product.image)}}" alt="Image!" class="img-thumbnail" width=150>
+        {% endif %}
+        <div class="col-md-4">
+            <div class="thumbnail text-center">
+                <a href="/product/{{product.id}}">
+                    <img src="{{asset('/img/'~product.image)}}" alt="Image!" class=" img-thumbnail img-responsive" />
+                </a>
+                <h3>{{product.name}}</h3>
+                {{product.shortdescription}}
+                <br/>
+                <span class="badge">{{product.price}}€</span>
             </div>
-            <h3><a href="/product/{{product.id}}">{{ product.name }}</a></h3>
-
-            <strong>{{ product.shortdescription }}</strong>
-            <strong>{{ product.price }}</strong>
         </div>
-    </div>       
-    {% else %} No products yet. {% endfor %}
+        {% if cpt%3==0 %}
+        </div>
+        {% endif %}
+    {% set cpt=cpt+1 %}
+    {% else %} 
+        <div class="text-center">
+            <strong>No products yet.</strong> 
+        </div>
+        {% endfor %}
+    </div>    
 </article>
 {% endblock %}
