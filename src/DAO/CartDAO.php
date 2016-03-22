@@ -51,6 +51,24 @@ class CartDAO extends DAO
         }
         return $cart;
     }
+    
+     /**
+     * Returns a product cart matching the supplied product et user.
+     *
+     * @param integer $userId
+     * @param integer $productId
+     *
+     * @return \Soundify\Domain\ProductCart
+     */
+    private function find($productId,$userId) {
+        $sql = "select * from cart where cart_product=? and cart_user=?";
+        $row = $this->getDb()->fetchAssoc($sql, array($productId,$userId));
+
+        if ($row)
+            return $this->buildDomainObject($row);
+        else
+return null;
+    }
 
     /**
      * Creates a Cart object based on a DB row.
@@ -77,6 +95,18 @@ class CartDAO extends DAO
 
         return $productCart;
     }
+    
+    private function existingProductInCart($productCart)
+    {
+        $productFind = $this->find($productCart->getProduct()->getId(),$productCart->getUser()->getId());
+        if($productFind){
+            if($productFind->getProduct()==$productCart->getProduct() && $productFind->getUser()==$productCart->getUser())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * Saves an product into the database.
@@ -84,12 +114,13 @@ class CartDAO extends DAO
      * @param \Soundify\Domain\ProductCart product The product to save in cart
      */
     public function save(ProductCart $productCart) {
-        if ($productCart->getProduct() && $productCart->getUser()) {
+        if ($this->existingProductInCart($productCart)==true) {
+            $productCart->setCount($this->find($productCart->getProduct()->getId(),$productCart->getUser()->getId())->getCount()+1);
             $productCartData = array(
                 'cart_count' => $productCart->getCount(),
             );
             // The product has already been saved : update it
-            $this->getDb()->update('cart', $productCartData, array('cart_product' => $productCart->getProduct(),'cart_user' => $productCart->getUser()));
+            $this->getDb()->update('cart', $productCartData, array('cart_product' => $productCart->getProduct()->getId(),'cart_user' => $productCart->getUser()->getId()));
         } else {
             $productCartData = array(
                 'cart_product' => $productCart->getProduct()->getId(),

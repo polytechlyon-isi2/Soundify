@@ -8,7 +8,7 @@ use Soundify\Domain\Category;
 use Soundify\Form\Type\CategoryType;
 use Soundify\Domain\User;
 use Soundify\Form\Type\UserType;
-use Soundify\Domain\Cart;
+use Soundify\Domain\ProductCart;
 
 // Home page
 $app->get('/', function (Request $request) use ($app) {
@@ -241,3 +241,15 @@ $app->get('/cart', function() use ($app) {
     return $app['twig']->render('cart.html.twig', array(
         'cart' => $cart ));
 })->bind('cart');
+
+// Add product in cart
+$app->get('/cart/{id}/add', function($id,Request $request) use ($app) {
+    $productCart = new ProductCart();
+    $productCart->setUser($app['dao.user']->find($app['user']->getId()));
+    $productCart->setProduct($app['dao.product']->find($id));
+    $productCart->setCount(1);
+    $app['dao.cart']->save($productCart);
+    $app['session']->getFlashBag()->add('success', 'Le produit a bien été ajouté au panier.');
+    // Redirect to product page
+    return $app->redirect($app['url_generator']->generate('cart'));
+})->bind('add_product_cart');

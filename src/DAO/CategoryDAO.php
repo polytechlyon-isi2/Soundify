@@ -32,6 +32,8 @@ class CategoryDAO extends DAO
         return $category;
     }
     
+   
+    
     /**
      * Returns a category matching the supplied id.
      *
