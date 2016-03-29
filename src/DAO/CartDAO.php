@@ -31,7 +31,7 @@ class CartDAO extends DAO
      *
      * @return array A list of all product.
      */
-    public function findAllByCategory($userId) {
+    public function findAllByUser($userId) {
         $user = $this->userDAO->find($userId);
 
         // The product won't be retrieved during domain objet construction

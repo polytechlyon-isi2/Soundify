@@ -33,13 +33,54 @@
                     <td>{{ productcart.count }}</td>
                     <td>{{ productcart.count * productcart.product.price |number_format(2, '.', ',') }}€</td>
                     <td>
+                        <button type="button" class="btn btn-primary btn-xs" title="Delete" data-toggle="modal" data-target="#cartEditDialog{{ productcart.product.id }}"><span class="glyphicon glyphicon-edit"></span>
+                        </button>
+                        <div class="modal fade" id="cartEditDialog{{ productcart.product.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Nouvelle quantité</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Sélectionnez une nouvelle quantité
+                                        <input type="number" class="form-control" value={{ productcart.count }} />
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                        <a href="{{ path('edit_product_cart', { 'id': productcart.product.id, 'count':productcart.count }) }}" class="btn btn-danger">Valider</a>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->                         
+
+                        <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#cartDeleteDialog{{ productcart.product.id }}"><span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <div class="modal fade" id="cartDeleteDialog{{ productcart.product.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Demande de confirmation</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Voulez-vous vraiment supprimer ce produit du panier ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+                                        <a href="{{ path('delete_product_cart', { 'id': productcart.product.id }) }}" class="btn btn-danger">Oui</a>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
                     </td>
                 </tr>
-                {% else %}
-                Aucun produit dans votre panier
-                {% endfor %}
+                </tr>
+            {% else %}
+            Aucun produit dans votre panier
+            {% endfor %}
             </table>
-        </div>
     </div>
+</div>
 </div>
 {% endblock %}

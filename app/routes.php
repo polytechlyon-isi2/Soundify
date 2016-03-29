@@ -182,8 +182,6 @@ $app->match('/admin/user/{id}/edit', function($id, Request $request) use ($app) 
 
 // Remove a user
 $app->get('/admin/user/{id}/delete', function($id, Request $request) use ($app) {
-    // Delete all associated comments
-    $app['dao.comment']->deleteAllByUser($id);
     // Delete the user
     $app['dao.user']->delete($id);
     $app['session']->getFlashBag()->add('success', 'L\'utilisateur a bien été supprimé.');
@@ -215,7 +213,7 @@ $app->match('/signup', function(Request $request) use ($app) {
 })->bind('sign_up');
 
 // New user
-$app->match('/myaccount', function(Request $request) use ($app) {
+$app->get('/myaccount', function(Request $request) use ($app) {
     $user = $app['dao.user']->find($app['user']->getId());
     $userForm = $app['form.factory']->create(new UserType(), $user);
     $userForm->handleRequest($request);
@@ -237,13 +235,13 @@ $app->match('/myaccount', function(Request $request) use ($app) {
 
 // Cart page
 $app->get('/cart', function() use ($app) {
-    $cart = $app['dao.cart']->findAllByCategory($app['user']->getId());
+    $cart = $app['dao.cart']->findAllByUser($app['user']->getId());
     return $app['twig']->render('cart.html.twig', array(
         'cart' => $cart ));
 })->bind('cart');
 
 // Add product in cart
-$app->get('/cart/{id}/add', function($id,Request $request) use ($app) {
+$app->match('/cart/{id}/add', function($id,Request $request) use ($app) {
     $productCart = new ProductCart();
     $productCart->setUser($app['dao.user']->find($app['user']->getId()));
     $productCart->setProduct($app['dao.product']->find($id));
@@ -253,3 +251,22 @@ $app->get('/cart/{id}/add', function($id,Request $request) use ($app) {
     // Redirect to product page
     return $app->redirect($app['url_generator']->generate('cart'));
 })->bind('add_product_cart');
+
+// Add product in cart
+$app->match('/cart/{id}/edit', function($id,$count,Request $request) use ($app) {
+    $productCart = $app['dao.cart']->find($id);
+    $productCart->setCount($count);
+    $app['dao.cart']->save($productCart);
+    $app['session']->getFlashBag()->add('success', 'La modificiation a bien été effectuée.');
+    // Redirect to product page
+    return $app->redirect($app['url_generator']->generate('cart'));
+})->bind('edit_product_cart');
+
+// Remove a user
+$app->match('/cart/{id}/delete', function($id,Request $request) use ($app) {
+    // Delete the user
+    $app['dao.cart']->delete($app['user']->getId(),$id);
+    $app['session']->getFlashBag()->add('success', 'Le produit a été supprimé avec succès.');
+    // Redirect to admin home page
+    return $app->redirect($app['url_generator']->generate('cart'));
+})->bind('delete_product_cart');

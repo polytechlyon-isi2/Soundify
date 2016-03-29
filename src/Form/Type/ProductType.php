@@ -25,7 +25,7 @@ class ProductType extends AbstractType
             ->add('shortdescription','textarea',array('label'=>'Présentation : '))
             ->add('longdescription', 'textarea',array('label'=>'Description détaillée : '))
             ->add('price','money',array('label'=>'Prix : ','currency' => 'EUR', 'precision' => 2))
-            ->add('image', 'file',array('label'=>'Image : '))
+            ->add('image', 'file', array('label'=>'Image : '))
             ->add('category', 'choice', array('expanded'=>false,'multiple'=>false,'choices'=>$choices,'choice_value' => function ($choice) {
                     return $choice;
                 },'choices_as_values'=>true,'label'=>'Catégorie : '));
