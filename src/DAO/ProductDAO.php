@@ -118,16 +118,45 @@ class ProductDAO extends DAO
 
         if ($product->getId()) {
             // The article has already been saved : update it
+            $this->addImage($productData['product_image']);
+            //$productData['product_image'] = $productData['product_image']['name'];
             $this->getDb()->update('product', $productData, array('product_id' => $product->getId()));
         } else {
             // The article has never been saved : insert it
+            $this->addImage($productData['product_image']);
+            $productData['product_image'] = $productData['product_image']->getClientOriginalName();
             $this->getDb()->insert('product', $productData);
             // Get the id of the newly created product and set it on the entity.
             $id = $this->getDb()->lastInsertId();
             $product->setId($id);
         }
     }
+    
+    public function addImage($image)
+    {
+        if($image->getError() > 0)
+        {
+            $erreur = "Erreur: Fichier probablement trop volumineux.";
+            //return $erreur;
+        }
+        
+        $extensions_valides = array('jpg' , 'jpeg' , 'gif' , 'png' );
 
+        if ( !in_array($image->getExtension(),$extensions_valides) ) 
+        {
+            $erreur = "Erreur: format de fichier incorrect. Merci de choisir un .jpg, .jpeg, .gif ou .png.";
+            //return $erreur;
+        }
+
+        $path = __DIR__."/../../web/img/";
+        $resultat = $image->move($path, $image->getClientOriginalName());
+        if (!$resultat)
+        {
+            $erreur = "Erreur: problème lors du transfert de fichier.";
+            //return $erreur;
+        }
+    }
+    
     /**
      * Removes an product from the database.
      *
