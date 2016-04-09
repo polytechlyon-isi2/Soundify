@@ -278,9 +278,9 @@ $app->match('/cart/{id}/add', function($id,Request $request) use ($app) {
 })->bind('add_product_cart');
 
 // Add product in cart
-$app->match('/cart/{id}/edit', function($id,$count,Request $request) use ($app) {
-    $productCart = $app['dao.cart']->find($id);
-    $productCart->setCount($count);
+$app->match('/cart/{id}/edit', function($id,Request $request) use ($app) {
+    $productCart = $app['dao.cart']->find($id,$app['user']->getId());
+    $productCart->setCount($request->get('count'));
     $app['dao.cart']->save($productCart);
     $app['session']->getFlashBag()->add('success', 'La modificiation a bien été effectuée.');
     // Redirect to product page

@@ -6,7 +6,7 @@ use Soundify\Domain\Product;
 
 class ProductDAO extends DAO
 {
-    
+
     /**
      * @var \Soundify\DAO\CategoryDAO
      */
@@ -15,8 +15,8 @@ class ProductDAO extends DAO
     public function setCategoryDAO(CategoryDAO $categoryDAO) {
         $this->categoryDAO = $categoryDAO;
     }
-    
-     /**
+
+    /**
      * Return a list of all products.
      *
      * @return array A list of all products.
@@ -33,8 +33,8 @@ class ProductDAO extends DAO
         }
         return $products;
     }
-    
-     /**
+
+    /**
      * Return a list of all product, sorted by category.
      *
      * @return array A list of all product.
@@ -80,10 +80,10 @@ class ProductDAO extends DAO
             $category = $this->categoryDAO->find($categoryId);
             $product->setCategory($category);
         }
-        
+
         return $product;
     }
-    
+
     /**
      * Returns a product matching the supplied id.
      *
@@ -100,8 +100,8 @@ class ProductDAO extends DAO
         else
             throw new \Exception("No product matching id " . $id);
     }
-    
-     /**
+
+    /**
      * Saves an product into the database.
      *
      * @param \Soundify\Domain\Product product The product to save
@@ -114,7 +114,7 @@ class ProductDAO extends DAO
             'product_price' => $product->getPrice(),
             'product_category' => $product->getCategory(),
             'product_image' => $product->getImage(),
-            );
+        );
 
         if ($product->getId()) {
             // The article has already been saved : update it
@@ -131,7 +131,7 @@ class ProductDAO extends DAO
             $product->setId($id);
         }
     }
-    
+
     public function addImage($image)
     {
         if($image->getError() > 0)
@@ -139,7 +139,7 @@ class ProductDAO extends DAO
             $erreur = "Erreur: Fichier probablement trop volumineux.";
             //return $erreur;
         }
-        
+
         $extensions_valides = array('jpg' , 'jpeg' , 'gif' , 'png' );
 
         if ( !in_array($image->getExtension(),$extensions_valides) ) 
@@ -156,7 +156,7 @@ class ProductDAO extends DAO
             //return $erreur;
         }
     }
-    
+
     /**
      * Removes an product from the database.
      *

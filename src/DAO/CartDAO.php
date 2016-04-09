@@ -51,7 +51,7 @@ class CartDAO extends DAO
         }
         return $cart;
     }
-    
+
     public function getCountByUser($userId)
     {
         $user = $this->userDAO->find($userId);
@@ -62,8 +62,8 @@ class CartDAO extends DAO
 
         return $row['count(*)'];
     }
-    
-     /**
+
+    /**
      * Returns a product cart matching the supplied product et user.
      *
      * @param integer $userId
@@ -71,14 +71,14 @@ class CartDAO extends DAO
      *
      * @return \Soundify\Domain\ProductCart
      */
-    private function find($productId,$userId) {
+    public function find($productId,$userId) {
         $sql = "select * from cart where cart_product=? and cart_user=?";
         $row = $this->getDb()->fetchAssoc($sql, array($productId,$userId));
 
         if ($row)
             return $this->buildDomainObject($row);
         else
-return null;
+            return null;
     }
 
     /**
@@ -106,7 +106,7 @@ return null;
 
         return $productCart;
     }
-    
+
     private function existingProductInCart($productCart)
     {
         $productFind = $this->find($productCart->getProduct()->getId(),$productCart->getUser()->getId());
@@ -126,7 +126,7 @@ return null;
      */
     public function save(ProductCart $productCart) {
         if ($this->existingProductInCart($productCart)==true) {
-            $productCart->setCount($this->find($productCart->getProduct()->getId(),$productCart->getUser()->getId())->getCount()+1);
+            //$productCart->setCount($this->find($productCart->getProduct()->getId(),$productCart->getUser()->getId())->getCount());
             $productCartData = array(
                 'cart_count' => $productCart->getCount(),
             );
