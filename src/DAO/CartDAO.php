@@ -52,6 +52,17 @@ class CartDAO extends DAO
         return $cart;
     }
     
+    public function getCountByUser($userId)
+    {
+        $user = $this->userDAO->find($userId);
+
+        // The product won't be retrieved during domain objet construction
+        $sql = "select count(*) from cart where cart_user=?";
+        $row = $this->getDb()->fetchAssoc($sql, array($userId));
+
+        return $row['count(*)'];
+    }
+    
      /**
      * Returns a product cart matching the supplied product et user.
      *

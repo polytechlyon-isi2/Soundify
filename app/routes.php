@@ -13,11 +13,22 @@ use Soundify\Domain\ProductCart;
 // Home page
 $app->get('/', function (Request $request) use ($app) {
     $categories = $app['dao.category']->findAll();
+    if($app['user'])
+    {
+        $number = $app['dao.cart']->getCountByUser($app['user']->getId());
+        return $app['twig']->render('index.html.twig', array(
+            'error'         => $app['security.last_error']($request),
+            'last_username' => $app['session']->get('_security.last_username'),
+            'categories' => $categories,
+            'number' => $number
+        ));
+    }
     return $app['twig']->render('index.html.twig', array(
         'error'         => $app['security.last_error']($request),
         'last_username' => $app['session']->get('_security.last_username'),
-        'categories' => $categories,
+        'categories' => $categories
     ));
+
 })->bind('home');
 
 
@@ -32,6 +43,11 @@ $app->get('/category/{id}', function ($id) use ($app) {
     $categories = $app['dao.category']->findAll();
     $category = $app['dao.category']->find($id);
     $products = $app['dao.product']->findAllByCategory($id);
+    if($app['user'])
+    {
+        $number = $app['dao.cart']->getCountByUser($app['user']->getId());
+        return $app['twig']->render('category.html.twig', array('category' => $category, 'products' => $products,'categories' => $categories,'number' => $number));
+    }
     return $app['twig']->render('category.html.twig', array('category' => $category, 'products' => $products,'categories' => $categories));
 })->bind('category');
 
@@ -39,7 +55,12 @@ $app->get('/category/{id}', function ($id) use ($app) {
 $app->get('/product/{id}', function ($id) use ($app) {
     $categories = $app['dao.category']->findAll();
     $product = $app['dao.product']->find($id);
-    return $app['twig']->render('product.html.twig', array('categories' => $categories, 'product' => $product));
+    if($app['user'])
+    {
+        $number = $app['dao.cart']->getCountByUser($app['user']->getId());
+        return $app['twig']->render('product.html.twig', array('categories' => $categories, 'product' => $product,'number' => $number));
+    }
+    return $app['twig']->render('product.html.twig', array('categories' => $categories, 'product' => $product));    
 })->bind('product');
 
 // Login form
@@ -213,7 +234,8 @@ $app->match('/signup', function(Request $request) use ($app) {
 })->bind('sign_up');
 
 // New user
-$app->get('/myaccount', function(Request $request) use ($app) {
+$app->match('/myaccount', function(Request $request) use ($app) {
+    $number = $app['dao.cart']->getCountByUser($app['user']->getId());
     $user = $app['dao.user']->find($app['user']->getId());
     $userForm = $app['form.factory']->create(new UserType(), $user);
     $userForm->handleRequest($request);
@@ -229,15 +251,18 @@ $app->get('/myaccount', function(Request $request) use ($app) {
     }
     return $app['twig']->render('user_form.html.twig', array(
         'title' => 'Modifier mon compte',
-        'userForm' => $userForm->createView()));
+        'userForm' => $userForm->createView(),
+        'number' => $number));
 })->bind('myaccount');
 
 
 // Cart page
 $app->get('/cart', function() use ($app) {
+    $number = $app['dao.cart']->getCountByUser($app['user']->getId());
     $cart = $app['dao.cart']->findAllByUser($app['user']->getId());
     return $app['twig']->render('cart.html.twig', array(
-        'cart' => $cart ));
+        'cart' => $cart,
+        'number' => $number));
 })->bind('cart');
 
 // Add product in cart

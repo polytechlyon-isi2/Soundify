@@ -1,8 +1,18 @@
-{% extends "layout.html.twig" %} {% block title %}Home{% endblock %} {% block menu %} {% for category in categories %}
+{% extends "layout.html.twig" %} {% block title %}Home{% endblock %} 
+
+{% block menu %}
+{% for category in categories %}
 <li>
     <a href="/category/{{ category.id }}"><i class=" fa fa-cog "></i>{{ category.name }}</a>
 </li>
-{% endfor %} {% endblock %}{% block content %}
+{% endfor %} 
+{% endblock %}
+
+{% block number %}
+{{ number }}
+{% endblock %}
+
+{% block content %}
 <article>   
     <h1 class="titre">{{ category.name }}</h1>
     {% set cpt = 1 %}
