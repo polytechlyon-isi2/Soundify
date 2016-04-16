@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Mar 15 Mars 2016 à 14:51
+-- Généré le :  Sam 16 Avril 2016 à 18:38
 -- Version du serveur :  10.1.9-MariaDB
 -- Version de PHP :  5.6.15
 
@@ -23,21 +23,25 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `cart`
+--
+
+CREATE TABLE `cart` (
+  `cart_product` int(11) NOT NULL,
+  `cart_user` int(11) NOT NULL,
+  `cart_count` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `category`
 --
 
 CREATE TABLE `category` (
   `category_id` int(11) NOT NULL,
-  `category_name` text NOT NULL
+  `category_name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `category`
---
-
-INSERT INTO `category` (`category_id`, `category_name`) VALUES
-(1, 'Sans catégorie'),
-(2, 'Casque');
 
 -- --------------------------------------------------------
 
@@ -47,21 +51,13 @@ INSERT INTO `category` (`category_id`, `category_name`) VALUES
 
 CREATE TABLE `product` (
   `product_id` int(11) NOT NULL,
-  `product_name` text NOT NULL,
+  `product_name` varchar(100) NOT NULL,
   `product_short_desc` text NOT NULL,
   `product_long_desc` text NOT NULL,
   `product_price` float NOT NULL,
   `product_category` int(11) NOT NULL,
   `product_image` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Contenu de la table `product`
---
-
-INSERT INTO `product` (`product_id`, `product_name`, `product_short_desc`, `product_long_desc`, `product_price`, `product_category`, `product_image`) VALUES
-(1, 'Casque', 'Ceci est un casque', 'Ceci est la description d''un casque', 10, 1, 'casque.jpg'),
-(2, 'flezjk', 'lkjflekj', 'fglekjl', 5, 2, 'rfg');
 
 -- --------------------------------------------------------
 
@@ -75,40 +71,42 @@ CREATE TABLE `user` (
   `user_firstname` text NOT NULL,
   `user_address` text NOT NULL,
   `user_zipcode` text NOT NULL,
-  `user_mail` text NOT NULL,
+  `user_mail` varchar(100) NOT NULL,
   `user_password` text NOT NULL,
   `user_salt` text NOT NULL,
   `user_role` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Contenu de la table `user`
---
-
-INSERT INTO `user` (`user_id`, `user_name`, `user_firstname`, `user_address`, `user_zipcode`, `user_mail`, `user_password`, `user_salt`, `user_role`) VALUES
-(1, 'admin', 'admin', 'admin', 'admin', 'admin@admin.com', 'gqeuP4YJ8hU3ZqGwGikB6+rcZBqefVy+7hTLQkOD+jwVkp4fkS7/gr1rAQfn9VUKWc7bvOD7OsXrQQN5KGHbfg==', 'EDDsl&fBCJB|a5XUtAlnQN8', 'ROLE_ADMIN');
-
---
 -- Index pour les tables exportées
 --
+
+--
+-- Index pour la table `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`cart_product`,`cart_user`);
 
 --
 -- Index pour la table `category`
 --
 ALTER TABLE `category`
-  ADD PRIMARY KEY (`category_id`);
+  ADD PRIMARY KEY (`category_name`),
+  ADD UNIQUE KEY `category_id` (`category_id`);
 
 --
 -- Index pour la table `product`
 --
 ALTER TABLE `product`
-  ADD PRIMARY KEY (`product_id`);
+  ADD PRIMARY KEY (`product_name`),
+  ADD UNIQUE KEY `product_id` (`product_id`);
 
 --
 -- Index pour la table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`user_id`);
+  ADD PRIMARY KEY (`user_mail`),
+  ADD UNIQUE KEY `user_id` (`user_id`);
 
 --
 -- AUTO_INCREMENT pour les tables exportées
@@ -118,12 +116,12 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `category`
 --
 ALTER TABLE `category`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT pour la table `product`
 --
 ALTER TABLE `product`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT pour la table `user`
 --
