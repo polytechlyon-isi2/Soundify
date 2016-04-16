@@ -38,9 +38,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     ),
     'security.access_rules' => array(
         array('^/admin', 'ROLE_ADMIN'),
-    ),
-    'security.access_rules' => array(
-        array('^/cart', 'ROLE_USER'),
+        array('^/cart', 'ROLE_USER')
     ),
 ));
 

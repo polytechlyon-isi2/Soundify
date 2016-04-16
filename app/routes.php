@@ -65,7 +65,9 @@ $app->get('/product/{id}', function ($id) use ($app) {
 
 // Login form
 $app->get('/login', function(Request $request) use ($app) {
+    $categories = $app['dao.category']->findAll();
     return $app['twig']->render('login.html.twig', array(
+        'categories' => $categories,
         'error'         => $app['security.last_error']($request),
         'last_username' => $app['session']->get('_security.last_username'),
     ));
@@ -73,10 +75,12 @@ $app->get('/login', function(Request $request) use ($app) {
 
 // Admin home page
 $app->get('/admin', function() use ($app) {
+    $number = $app['dao.cart']->getCountByUser($app['user']->getId());
     $categories = $app['dao.category']->findAll();
     $products = $app['dao.product']->findAll();
     $users = $app['dao.user']->findAll();
     return $app['twig']->render('admin.html.twig', array(
+        'number' => $number,
         'categories' => $categories,
         'products' => $products,
         'users' => $users));
@@ -84,6 +88,7 @@ $app->get('/admin', function() use ($app) {
 
 // Add a new product
 $app->match('/admin/product/add', function(Request $request) use ($app) {
+    $categories = $app['dao.category']->findAll();
     $product = new Product();
     $categories = $app['dao.category']->findAll();
     if($categories!=null){
@@ -94,6 +99,7 @@ $app->match('/admin/product/add', function(Request $request) use ($app) {
             $app['session']->getFlashBag()->add('success', 'Le produit "'. $product->getName() . '" a bien été créé.');
         }
         return $app['twig']->render('product_form.html.twig', array(
+            'categories' => $categories,
             'title' => 'Nouveau Produit',
             'productForm' => $productForm->createView()));
     }
@@ -103,6 +109,7 @@ $app->match('/admin/product/add', function(Request $request) use ($app) {
 
 // Edit an existing product
 $app->match('/admin/product/{id}/edit', function($id, Request $request) use ($app) {
+    $categories = $app['dao.category']->findAll();
     $product = $app['dao.product']->find($id);
     $categories = $app['dao.category']->findAll();
     $productForm = $app['form.factory']->create(new ProductType($categories), $product);
@@ -112,6 +119,7 @@ $app->match('/admin/product/{id}/edit', function($id, Request $request) use ($ap
         $app['session']->getFlashBag()->add('success', 'Le produit "'. $product->getName() . '" a bien été mis à jour.');
     }
     return $app['twig']->render('product_form.html.twig', array(
+        'categories' => $categories,
         'title' => 'Edition du produit',
         'productForm' => $productForm->createView()));
 })->bind('admin_product_edit');
@@ -128,28 +136,44 @@ $app->get('/admin/product/{id}/delete', function($id, Request $request) use ($ap
 
 // Add a new category
 $app->match('/admin/category/add', function(Request $request) use ($app) {
+    $categories = $app['dao.category']->findAll();
     $category = new Category();
     $categoryForm = $app['form.factory']->create(new CategoryType(), $category);
     $categoryForm->handleRequest($request);
     if ($categoryForm->isSubmitted() && $categoryForm->isValid()) {
-        $app['dao.category']->save($category);
-        $app['session']->getFlashBag()->add('success', 'La catégorie "'. $category->getName() . '" a bien été créée.');
+        $exist = $app['dao.category']->exist($category);
+        if($exist==null)
+        {
+            $app['dao.category']->save($category);
+            $app['session']->getFlashBag()->add('success', 'La catégorie "'. $category->getName() . '" a bien été créée.');
+        }else{
+            $app['session']->getFlashBag()->add('success', 'Une catégorie porte déjà ce nom.');
+        }
     }
     return $app['twig']->render('category_form.html.twig', array(
+        'categories' => $categories,
         'title' => 'Nouvelle catégorie',
         'categoryForm' => $categoryForm->createView()));
 })->bind('admin_category_add');
 
 // Edit an existing product
 $app->match('/admin/category/{id}/edit', function($id, Request $request) use ($app) {
+    $categories = $app['dao.category']->findAll();
     $category = $app['dao.category']->find($id);
     $categoryForm = $app['form.factory']->create(new CategoryType(), $category);
     $categoryForm->handleRequest($request);
     if ($categoryForm->isSubmitted() && $categoryForm->isValid()) {
-        $app['dao.category']->save($category);
-        $app['session']->getFlashBag()->add('success', 'La catégorie "'. $category->getName() . '" a bien été mise à jour.');
+        $exist = $app['dao.category']->exist($category);
+        if($exist==null)
+        {
+            $app['dao.category']->save($category);
+            $app['session']->getFlashBag()->add('success', 'La catégorie "'. $category->getName() . '" a bien été mise à jour.');
+        }else{
+            $app['session']->getFlashBag()->add('success', 'Une catégorie porte déjà ce nom.');
+        }
     }
     return $app['twig']->render('category_form.html.twig', array(
+        'categories' => $categories,
         'title' => 'Edition de la catégorie',
         'categoryForm' => $categoryForm->createView()));
 })->bind('admin_category_edit');
@@ -166,6 +190,7 @@ $app->get('/admin/category/{id}/delete', function($id, Request $request) use ($a
 
 // Add a user
 $app->match('/admin/user/add', function(Request $request) use ($app) {
+    $categories = $app['dao.category']->findAll();
     $user = new User();
     $userForm = $app['form.factory']->create(new UserType(), $user);
     $userForm->handleRequest($request);
@@ -183,12 +208,14 @@ $app->match('/admin/user/add', function(Request $request) use ($app) {
         $app['session']->getFlashBag()->add('success', 'L\'utilisateur "'. $user->getName() . " " . $user->getFirstname() . '" a bien été créé.');
     }
     return $app['twig']->render('user_form.html.twig', array(
+        'categories' => $categories,
         'title' => 'Nouvel utilisateur',
         'userForm' => $userForm->createView()));
 })->bind('admin_user_add');
 
 // Edit an existing user
 $app->match('/admin/user/{id}/edit', function($id, Request $request) use ($app) {
+    $categories = $app['dao.category']->findAll();
     $user = $app['dao.user']->find($id);
     $userForm = $app['form.factory']->create(new UserType(), $user);
     $userForm->handleRequest($request);
@@ -203,6 +230,7 @@ $app->match('/admin/user/{id}/edit', function($id, Request $request) use ($app) 
         $app['session']->getFlashBag()->add('success', 'L\'utilisateur '. $user->getName() . " " . $user->getFirstname() . '" a bien été mis à jour.');
     }
     return $app['twig']->render('user_form.html.twig', array(
+        'categories' => $categories,
         'title' => 'Edition de l\'utilisateur',
         'userForm' => $userForm->createView()));
 })->bind('admin_user_edit');
@@ -218,6 +246,7 @@ $app->get('/admin/user/{id}/delete', function($id, Request $request) use ($app) 
 
 // New user
 $app->match('/signup', function(Request $request) use ($app) {
+    $categories = $app['dao.category']->findAll();
     $user = new User();
     $userForm = $app['form.factory']->create(new UserType(), $user);
     $userForm->handleRequest($request);
@@ -235,12 +264,14 @@ $app->match('/signup', function(Request $request) use ($app) {
         $app['session']->getFlashBag()->add('success', 'L\'utilisateur "'. $user->getName() . " " . $user->getFirstname() . '" a bien été créé.');
     }
     return $app['twig']->render('user_form.html.twig', array(
+        'categories' => $categories,
         'title' => 'Inscription',
         'userForm' => $userForm->createView()));
 })->bind('sign_up');
 
 // New user
 $app->match('/myaccount', function(Request $request) use ($app) {
+    $categories = $app['dao.category']->findAll();
     $number = $app['dao.cart']->getCountByUser($app['user']->getId());
     $user = $app['dao.user']->find($app['user']->getId());
     $userForm = $app['form.factory']->create(new UserType(), $user);
@@ -256,6 +287,7 @@ $app->match('/myaccount', function(Request $request) use ($app) {
         $app['session']->getFlashBag()->add('success', 'Votre compte a bien été mis à jour.');
     }
     return $app['twig']->render('user_form.html.twig', array(
+        'categories' => $categories,
         'title' => 'Modifier mon compte',
         'userForm' => $userForm->createView(),
         'number' => $number));
@@ -264,9 +296,11 @@ $app->match('/myaccount', function(Request $request) use ($app) {
 
 // Cart page
 $app->get('/cart', function() use ($app) {
+    $categories = $app['dao.category']->findAll();
     $number = $app['dao.cart']->getCountByUser($app['user']->getId());
     $cart = $app['dao.cart']->findAllByUser($app['user']->getId());
     return $app['twig']->render('cart.html.twig', array(
+        'categories' => $categories,
         'cart' => $cart,
         'number' => $number));
 })->bind('cart');

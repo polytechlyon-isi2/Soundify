@@ -55,6 +55,23 @@ class CategoryDAO extends DAO
         else
             throw new \Exception("No category matching id " . $id);
     }
+    
+    /**
+     * Returns a category matching the supplied name.
+     *
+     * @param string $name
+     *
+     * @return \Soundify\Domain\Category|throws an exception if no matching category is found
+     */
+    public function exist($category) {
+        $sql = "select * from category where category_name=?";
+        $row = $this->getDb()->fetchAssoc($sql, array($category->getName()));
+
+        if ($row)
+            return $this->buildDomainObject($row);
+        else
+            return null;
+    }
 
     /**
      * Saves a category into the database.
@@ -65,7 +82,7 @@ class CategoryDAO extends DAO
         $categoryData = array(
             'category_name' => $category->getName(),
         );
-
+        
         if ($category->getId()) {
             // The article has already been saved : update it
             $this->getDb()->update('category', $categoryData, array('category_id' => $category->getId()));
