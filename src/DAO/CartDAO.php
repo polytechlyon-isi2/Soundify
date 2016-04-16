@@ -25,7 +25,7 @@ class CartDAO extends DAO
     public function setProductDAO(ProductDAO $productDAO) {
         $this->productDAO = $productDAO;
     }
-
+    
     /**
      * Return a cart for user.
      *
@@ -51,6 +51,7 @@ class CartDAO extends DAO
         }
         return $cart;
     }
+
 
     public function getCountByUser($userId)
     {
@@ -162,6 +163,15 @@ class CartDAO extends DAO
      */
     public function deleteAll($userId) {
         $this->getDb()->delete('cart', array('cart_user' => $userId));
+    }
+    
+    /**
+     * Removes all product in cart from the database.
+     *
+     * @param integer $userId The user id.
+     */
+    public function deleteAllByProduct($productId) {
+        $this->getDb()->delete('cart', array('cart_product' => $productId));
     }
 
 }

@@ -36,7 +36,7 @@
                 {% for product in products %}
                 <tr>
                     <td>
-                        <a class="productTitle" href="{#{{ path('product', { 'id': product.id }) }}#}" > {{ product.name }}</a></td>
+                        <a class="productTitle" href="{{ path('product', { 'id': product.id }) }}" > {{ product.name }}</a></td>
                     <td>{{ product.shortdescription | truncate(60) }}</td>
                     <td>{{ product.category.name }}</td>
                     <td>{{ product.price |number_format(2, '.', ',') }}€</td>
@@ -66,7 +66,7 @@
             </table>
         </div>
         {% else %}
-        <div class="alert alert-warning">No products found.</div>
+        <div class="alert alert-warning">Aucun produit trouvé</div>
         {% endif %}
         <a href="{{ path('admin_product_add') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter un nouveau produit</button></a>
     </div>
@@ -83,7 +83,7 @@
                 {% for category in categories %}
                 <tr>
                     <td>
-                        <a class="categoryTitle" href="{#{{ path('category', { 'id': category.id }) }}#}" > {{ category.name }}</a></td>
+                        <a class="categoryTitle" href="{{ path('category', { 'id': category.id }) }}" > {{ category.name }}</a></td>
                     <td>
                         <a href="{{ path('admin_category_edit', { 'id': category.id }) }}" class="btn btn-info btn-xs" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
                         <button type="button" class="btn btn-danger btn-xs" title="Delete" data-toggle="modal" data-target="#categoryDialog{{ category.id }}"><span class="glyphicon glyphicon-remove"></span>
@@ -110,7 +110,7 @@
             </table>
         </div>
         {% else %}
-        <div class="alert alert-warning">No products found.</div>
+        <div class="alert alert-warning">Aucune catégorie trouvée</div>
         {% endif %}
         <a href="{{ path('admin_category_add') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter une nouvelle catégorie</button></a>    </div>
     <div class="tab-pane fade adminTable" id="users">
@@ -143,14 +143,14 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title" id="myModalLabel">Confirmation needed</h4>
+                                        <h4 class="modal-title" id="myModalLabel">Confirmation de suppression</h4>
                                     </div>
                                     <div class="modal-body">
-                                        Do you really want to delete this user ?
+                                        Voulez-vous vraiment supprimer cet utilisateur ?
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                        <a href="{{ path('admin_user_delete', { 'id': user.id }) }}" class="btn btn-danger">Confirm</a>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                                        <a href="{{ path('admin_user_delete', { 'id': user.id }) }}" class="btn btn-danger">Oui</a>
                                     </div>
                                 </div><!-- /.modal-content -->
                             </div><!-- /.modal-dialog -->
@@ -161,8 +161,8 @@
             </table>
         </div>
         {% else %}
-        <div class="alert alert-warning">No users found.</div>
+        <div class="alert alert-warning">Aucun utilisateur trouvé</div>
         {% endif %}
-        <a href="{{ path('admin_user_add') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add user</button></a>    </div>
+        <a href="{{ path('admin_user_add') }}"><button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter un utilisateur</button></a>    </div>
 </div>
 {% endblock %}

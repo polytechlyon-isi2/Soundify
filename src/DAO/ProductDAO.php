@@ -166,4 +166,14 @@ class ProductDAO extends DAO
         // Delete the product
         $this->getDb()->delete('product', array('product_id' => $id));
     }
+    
+    /**
+     * Removes an product from the database.
+     *
+     * @param integer $id The product id.
+     */
+    public function deleteAllByCategory($idCategory) {
+        // Delete the products
+        $this->getDb()->delete('product', array('product_category' => $idCategory));
+    }
 }

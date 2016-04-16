@@ -6,7 +6,14 @@ use Soundify\Domain\Category;
 
 class CategoryDAO extends DAO
 {
-     public function findAll() {
+    /*
+    private $productDAO;
+
+    public function setProductDAO(ProductDAO $productDAO) {
+        $this->productDAO = $productDAO;
+    }
+*/
+    public function findAll() {
         $sql = "select * from category order by category_id desc";
         $result = $this->getDb()->fetchAll($sql);
 
@@ -18,7 +25,7 @@ class CategoryDAO extends DAO
         }
         return $categories;
     }
-    
+
     /**
      * Creates a Category object based on a DB row.
      *
@@ -28,12 +35,10 @@ class CategoryDAO extends DAO
         $category = new Category();
         $category->setId($row['category_id']);
         $category->setName($row['category_name']);
-        
+
         return $category;
     }
-    
-   
-    
+
     /**
      * Returns a category matching the supplied id.
      *
@@ -50,7 +55,7 @@ class CategoryDAO extends DAO
         else
             throw new \Exception("No category matching id " . $id);
     }
-    
+
     /**
      * Saves a category into the database.
      *
@@ -59,7 +64,7 @@ class CategoryDAO extends DAO
     public function save(Category $category) {
         $categoryData = array(
             'category_name' => $category->getName(),
-            );
+        );
 
         if ($category->getId()) {
             // The article has already been saved : update it
@@ -79,7 +84,12 @@ class CategoryDAO extends DAO
      * @param integer $id The category id.
      */
     public function delete($id) {
-        // Delete the product
+        /*// Delete the products if exist
+        $products = $productDAO->findAllByCategory($id);
+        foreach ($product as $products) {
+            $productDAO->delete($product->getId());
+        }*/
+        // Delete the category
         $this->getDb()->delete('category', array('category_id' => $id));
     }
 }

@@ -86,15 +86,19 @@ $app->get('/admin', function() use ($app) {
 $app->match('/admin/product/add', function(Request $request) use ($app) {
     $product = new Product();
     $categories = $app['dao.category']->findAll();
-    $productForm = $app['form.factory']->create(new ProductType($categories), $product);
-    $productForm->handleRequest($request);
-    if ($productForm->isSubmitted() && $productForm->isValid()) {
-        $app['dao.product']->save($product);
-        $app['session']->getFlashBag()->add('success', 'Le produit "'. $product->getName() . '" a bien été créé.');
+    if($categories!=null){
+        $productForm = $app['form.factory']->create(new ProductType($categories), $product);
+        $productForm->handleRequest($request);
+        if ($productForm->isSubmitted() && $productForm->isValid()) {
+            $app['dao.product']->save($product);
+            $app['session']->getFlashBag()->add('success', 'Le produit "'. $product->getName() . '" a bien été créé.');
+        }
+        return $app['twig']->render('product_form.html.twig', array(
+            'title' => 'Nouveau Produit',
+            'productForm' => $productForm->createView()));
     }
-    return $app['twig']->render('product_form.html.twig', array(
-        'title' => 'Nouveau Produit',
-        'productForm' => $productForm->createView()));
+    $app['session']->getFlashBag()->add('success', 'Veuillez ajouter des catégories.');
+    return $app->redirect($app['url_generator']->generate('admin'));
 })->bind('admin_product_add');
 
 // Edit an existing product
@@ -115,6 +119,7 @@ $app->match('/admin/product/{id}/edit', function($id, Request $request) use ($ap
 // Remove an product
 $app->get('/admin/product/{id}/delete', function($id, Request $request) use ($app) {
     // Delete the product
+    $app['dao.cart']->deleteAllByProduct($id);
     $app['dao.product']->delete($id);
     $app['session']->getFlashBag()->add('success', 'Le produit a bien été supprimé.');
     // Redirect to admin home page
@@ -152,6 +157,7 @@ $app->match('/admin/category/{id}/edit', function($id, Request $request) use ($a
 // Remove an product
 $app->get('/admin/category/{id}/delete', function($id, Request $request) use ($app) {
     // Delete the category
+    $app['dao.product']->deleteAllByCategory($id);
     $app['dao.category']->delete($id);
     $app['session']->getFlashBag()->add('success', 'La catégorie a bien été supprimée.');
     // Redirect to admin home page

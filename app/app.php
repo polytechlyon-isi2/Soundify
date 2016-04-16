@@ -44,29 +44,25 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     ),
 ));
 
-
 $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider());
-// Register services
-/* $app['dao.user'] = $app->share(function ($app) {
-    return new Soundify\DAO\UserDAO($app['db']);
-});
-*/
 
 $app['dao.user'] = $app->share(function ($app) {
     return new Soundify\DAO\UserDAO($app['db']);
 });
 
 $app['dao.category'] = $app->share(function ($app) {
-    return new Soundify\DAO\CategoryDAO($app['db']);
+    $categoryDAO = new Soundify\DAO\CategoryDAO($app['db']);
+   // $categoryDAO->setProductDAO($app['dao.product']);
+    return $categoryDAO;
 });
 
 $app['dao.product'] = $app->share(function ($app) {
     $productDAO = new Soundify\DAO\ProductDAO($app['db']);
     $productDAO->setCategoryDAO($app['dao.category']);
+   // $productDAO->setCartDAO($app['dao.cart']);
     return $productDAO;
 });
-
 
 $app['dao.cart'] = $app->share(function ($app) {
     $cartDAO = new Soundify\DAO\CartDAO($app['db']);
@@ -78,9 +74,9 @@ $app['dao.cart'] = $app->share(function ($app) {
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $twig->addFunction(new \Twig_SimpleFunction('asset', function ($asset) use ($app) {
         return sprintf('%s/%s',
-            $app['request']->getBasePath(),
-            ltrim($asset, '/')
-        );
+                       $app['request']->getBasePath(),
+                       ltrim($asset, '/')
+                      );
     }));
 
     return $twig;
