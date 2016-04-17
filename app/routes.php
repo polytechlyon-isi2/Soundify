@@ -31,13 +31,6 @@ $app->get('/', function (Request $request) use ($app) {
 
 })->bind('home');
 
-
-// Add category page
-$app->get('/addCategory', function () use ($app) {
-    $categories = $app['dao.category']->findAll();
-    return $app['twig']->render('addCategory.html.twig', array('categories' => $categories));
-})->bind('addCategory');
-
 // Category page
 $app->get('/category/{id}', function ($id) use ($app) {
     $categories = $app['dao.category']->findAll();
@@ -353,3 +346,12 @@ $app->match('/cart/{id}/delete', function($id,Request $request) use ($app) {
     // Redirect to admin home page
     return $app->redirect($app['url_generator']->generate('cart'));
 })->bind('delete_product_cart');
+
+// Remove a user
+$app->match('/cart/deleteall', function(Request $request) use ($app) {
+    // Delete the user
+    $app['dao.cart']->deleteAll($app['user']->getId());
+    $app['session']->getFlashBag()->add('success', 'Le panier a été vidé.');
+    // Redirect to admin home page
+    return $app->redirect($app['url_generator']->generate('cart'));
+})->bind('delete_all_product_cart');

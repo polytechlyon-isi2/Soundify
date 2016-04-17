@@ -7,6 +7,14 @@
 {{ number }}
 {% endblock %}
 
+{% block menu %}
+{% for category in categories %}
+<li>
+    <a href="/category/{{ category.id }}"><i class=" fa fa-cog "></i>{{ category.name }}</a>
+</li>
+{% endfor %} 
+{% endblock %}
+
 {% block content %}
 <h2 class="text-center">{{ block('title') }}</h2>
 {% for flashMessage in app.session.flashbag.get('success') %}

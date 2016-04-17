@@ -1,5 +1,14 @@
 {% extends 'layout.html.twig' %} 
 {% block title %}Authentification{% endblock %}
+
+{% block menu %}
+{% for category in categories %}
+<li>
+    <a href="/category/{{ category.id }}"><i class=" fa fa-cog "></i>{{ category.name }}</a>
+</li>
+{% endfor %} 
+{% endblock %}
+
 {% block content %}
 <h2 class="text-center">{{ block('title') }}</h2> {% if error %}
 <div class="alert alert-danger">

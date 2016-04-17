@@ -6,6 +6,14 @@
 {{ number }}
 {% endblock %}
 
+{% block menu %}
+{% for category in categories %}
+<li>
+    <a href="/category/{{ category.id }}"><i class=" fa fa-cog "></i>{{ category.name }}</a>
+</li>
+{% endfor %} 
+{% endblock %}
+
 {% block content %}
 <h2 class="text-center">{{ block('title') }}</h2>
 {% for flashMessage in app.session.flashbag.get('success') %}
@@ -27,17 +35,19 @@
                         <th>Gestion</th>
                         <th></th>  <!-- Actions column -->
                     </tr>
+                    {% set prixtotal = 0 %}
                 </thead>
                 {% for productcart in cart %}
+                {% set prixtotal = prixtotal + productcart.count * productcart.product.price |number_format(2, '.', ',') %}
                 <tr>
                     <td>
-                        <a class="productTitle" href="{#{{ path('product', { 'id': product.id }) }}#}" > {{ productcart.product.name }}</a></td>
+                        <a class="productTitle" href="{{ path('product', { 'id': productcart.product.id }) }}" > {{ productcart.product.name }}</a></td>
                     <td>{{ productcart.product.shortdescription | truncate(60) }}</td>
                     <td>{{ productcart.product.price |number_format(2, '.', ',') }}€</td>
                     <td>{{ productcart.count }}</td>
                     <td>{{ productcart.count * productcart.product.price |number_format(2, '.', ',') }}€</td>
                     <td>
-                        <button type="button" class="btn btn-primary btn-xs" title="Delete" data-toggle="modal" data-target="#cartEditDialog{{ productcart.product.id }}"><span class="glyphicon glyphicon-edit"></span>
+                        <button type="button" class="btn btn-primary btn-xs" title="Delete" data-toggle="modal" data-target="#cartEditDialog{{ productcart.product.id }}"><span class="glyphicon glyphicon-retweet"></span>
                         </button>
                         <div class="modal fade" id="cartEditDialog{{ productcart.product.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
@@ -81,12 +91,41 @@
                         </div><!-- /.modal -->
                     </td>
                 </tr>
-                </tr>
-            {% else %}
-            Aucun produit dans votre panier
-            {% endfor %}
-            </table>
-    </div>
+                {% else %}
+                Aucun produit dans votre panier
+                {% endfor %}
+                <tfoot>
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><strong>{{ prixtotal }}€</strong></td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-xs" title="Vider" data-toggle="modal" data-target="#cartDeleteAllDialog">Vider</span>
+                </button>
+                    <div class="modal fade" id="cartDeleteAllDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="myModalLabel">Demande de confirmation</h4>
+                                </div>
+                                <div class="modal-body">
+                                    Voulez-vous vraiment supprimer l'ensemble de votre panier ?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+                                    <a href="{{ path('delete_all_product_cart') }}" class="btn btn-danger">Oui</a>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
 </div>
 </div>
 {% endblock %}
