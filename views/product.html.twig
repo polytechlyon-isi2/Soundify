@@ -15,13 +15,19 @@
 
 {% block content %}
 <article>
-    <div class="well row">
-        <img class="col-md-6 thumbnail img-responsive" src="{{asset('/img/'~product.image)}}"/>
-        <div class="col-md-6 text-right">
-            <h1>{{product.name}}</h1>
-            <p>{{product.longdescription}}</p>
-            <p><u>Prix:</u> <span class="badge">{{product.price}}€</span></p>
-            <a href="/cart/{{product.id}}/add" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter au panier</a>
+    <div class="panel panel-info">
+
+        <div class="panel-heading text-center">
+            <div class="panel-title" style=" font-size: 22px;">{{product.name}} <h4 class="text-right"><span class="label label-danger">{{product.price}}€</span> <span class="label label-default"><span class="glyphicon glyphicon-tag"></span> {{product.category}}</span></h4></div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <img class="col-md-6 img-responsive" src="{{asset('/img/'~product.image)}}"/>
+                <div class="col-md-6 text-right">
+                    <p>{{product.longdescription}}</p>
+                    <a href="/cart/{{product.id}}/add" class="btn btn-danger"><span class="glyphicon glyphicon-plus"></span> Ajouter au panier</a>
+                </div>
+            </div>
         </div>
     </div>
 </article>
