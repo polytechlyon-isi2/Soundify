@@ -127,3 +127,15 @@ body {
         color: #000;
     }
 }
+
+li a, li a:visited {
+    color: #e74c3c ;
+}
+
+li a:hover, li a:active {
+    color: #e74c3c ;
+}
+
+ a {
+    color: #e74c3c ;
+}
