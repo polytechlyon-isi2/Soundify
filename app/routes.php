@@ -102,7 +102,6 @@ $app->match('/admin/product/add', function(Request $request) use ($app) {
 
 // Edit an existing product
 $app->match('/admin/product/{id}/edit', function($id, Request $request) use ($app) {
-    $categories = $app['dao.category']->findAll();
     $product = $app['dao.product']->find($id);
     $categories = $app['dao.category']->findAll();
     $productForm = $app['form.factory']->create(new ProductType($categories), $product);
@@ -216,11 +215,12 @@ $app->match('/admin/user/add', function(Request $request) use ($app) {
 $app->match('/admin/user/{id}/edit', function($id, Request $request) use ($app) {
     $categories = $app['dao.category']->findAll();
     $user = $app['dao.user']->find($id);
+    $mail = $user->getUsername();
     $userForm = $app['form.factory']->create(new UserType(), $user);
     $userForm->handleRequest($request);
     if ($userForm->isSubmitted() && $userForm->isValid()) {
         $exist = $app['dao.user']->exist($user);
-        if($exist==null)
+        if($exist==null || $mail=$user->getUsername())
         {    
             $plainPassword = $user->getPassword();
             // find the encoder for the user
@@ -280,7 +280,7 @@ $app->match('/signup', function(Request $request) use ($app) {
         'userForm' => $userForm->createView()));
 })->bind('sign_up');
 
-// New user
+// Manage account
 $app->match('/myaccount', function(Request $request) use ($app) {
     $categories = $app['dao.category']->findAll();
     $number = $app['dao.cart']->getCountByUser($app['user']->getId());

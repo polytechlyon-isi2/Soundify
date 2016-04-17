@@ -23,8 +23,11 @@ class UserType extends AbstractType
                 'second_options'  => array('label' => 'Vérification mot de passe'),
             ))
             ->add('role', 'choice', array(
-                'choices' => array('ROLE_ADMIN' => 'Admin', 'ROLE_USER' => 'User')
+                'choices' => array('Administrateur' => 'ROLE_ADMIN', 'Utilisateur' => 'ROLE_USER'),'choice_value' => function ($choice) {
+                    return $choice;
+                },'choices_as_values'=>true
             ));
+        
     }
 
     public function getName()
