@@ -22,7 +22,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="{{ path('home') }}">Soundify</a>
+                        <a class="navbar-brand" href="{{ path('home') }}"><span class="glyphicon glyphicon-headphones"></span> Soundify</a>
                     </div>
                     <div class="collapse navbar-collapse" id="navbar-collapse-target">
                         <ul class="nav navbar-nav">
@@ -53,7 +53,8 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <span class="glyphicon glyphicon-user"></span> Bienvenue, {{ app.user.username }} <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="{{ path('logout') }}">Déconnexion</a></li>
+                                    <li><a href="{{ path('myaccount') }}"><span class="glyphicon glyphicon-home"></span> Mon compte</a></li>
+                                    <li><a href="{{ path('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Déconnexion</a></li>
                                 </ul>
                             </li>
                             {% else %}
@@ -61,7 +62,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <span class="glyphicon glyphicon-user"></span> Hors-Ligne <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="{{ path('login') }}">Authentification</a></li>
+                                    <li><a href="{{ path('login') }}"><span class="glyphicon glyphicon-log-in"></span> Authentification</a></li>
                                 </ul>
                             </li>
                             {% endif %}

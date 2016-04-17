@@ -8,9 +8,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 class ProductType extends AbstractType
 {
     public $categories;
-    public function __construct($categories)
+    public $image;
+    public function __construct($categories,$picture)
     {
         $this->categories = $categories;
+        $this->picture = $picture;        
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -20,6 +22,7 @@ class ProductType extends AbstractType
             $cle = $category->__toString();
             $choices[$cle] = $id;
         }
+        if( $this->picture==true){
         $builder
             ->add('name', 'text',array('label'=>'Nom : '))
             ->add('shortdescription','textarea',array('label'=>'Présentation : '))
@@ -29,6 +32,16 @@ class ProductType extends AbstractType
             ->add('category', 'choice', array('expanded'=>false,'multiple'=>false,'choices'=>$choices,'choice_value' => function ($choice) {
                     return $choice;
                 },'choices_as_values'=>true,'label'=>'Catégorie : '));
+        }else{
+            $builder
+            ->add('name', 'text',array('label'=>'Nom : '))
+            ->add('shortdescription','textarea',array('label'=>'Présentation : '))
+            ->add('longdescription', 'textarea',array('label'=>'Description détaillée : '))
+            ->add('price','money',array('label'=>'Prix : ','currency' => 'EUR', 'precision' => 2))
+            ->add('category', 'choice', array('expanded'=>false,'multiple'=>false,'choices'=>$choices,'choice_value' => function ($choice) {
+                    return $choice;
+                },'choices_as_values'=>true,'label'=>'Catégorie : '));
+        }
     }
 
     public function getName()

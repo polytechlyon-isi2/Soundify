@@ -87,7 +87,7 @@ $app->match('/admin/product/add', function(Request $request) use ($app) {
     $product = new Product();
     $categories = $app['dao.category']->findAll();
     if($categories!=null){
-        $productForm = $app['form.factory']->create(new ProductType($categories), $product);
+        $productForm = $app['form.factory']->create(new ProductType($categories,true), $product);
         $productForm->handleRequest($request);
         if ($productForm->isSubmitted() && $productForm->isValid()) {
             $app['dao.product']->save($product);
@@ -106,8 +106,10 @@ $app->match('/admin/product/add', function(Request $request) use ($app) {
 // Edit an existing product
 $app->match('/admin/product/{id}/edit', function($id, Request $request) use ($app) {
     $product = $app['dao.product']->find($id);
+    //$path = new Symfony\Component\HttpFoundation\File\File(__DIR__."/../web/img/".$product->getImage());
+    //$product->setImage($path);
     $categories = $app['dao.category']->findAll();
-    $productForm = $app['form.factory']->create(new ProductType($categories), $product);
+    $productForm = $app['form.factory']->create(new ProductType($categories,false), $product);
     $productForm->handleRequest($request);
     if ($productForm->isSubmitted() && $productForm->isValid()) {
         $app['dao.product']->save($product);

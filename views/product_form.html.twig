@@ -67,6 +67,7 @@
             }}) }}
         </div>
     </div>
+          {% if productForm.image  is defined %}
    <div class="form-group">
         {{ form_label(productForm.image, null, { 'label_attr':  {
             'class': 'col-sm-4 control-label'
@@ -78,13 +79,14 @@
             }}) }}
         </div>
     </div>
+        {% endif %}
     <div class="form-group">
         {{ form_label(productForm.category, null, { 'label_attr':  {
             'class': 'col-sm-4 control-label'
         }}) }}
         <div class="col-sm-6">
             {{ form_errors(productForm.category) }}
-            {{ form_widget(productForm.category, { 'attr':  {
+            {{ form_widget(productForm.category,{ 'attr':  {
                 'class': 'form-control'
             }}) }}
         </div>

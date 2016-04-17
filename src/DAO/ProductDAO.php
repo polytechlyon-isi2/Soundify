@@ -132,7 +132,7 @@ class ProductDAO extends DAO
 
         if ($product->getId()) {
             // The article has already been saved : update it
-            $this->addImage($productData['product_image']);
+            //$this->addImage($productData['product_image']);
             //$productData['product_image'] = $productData['product_image']['name'];
             $this->getDb()->update('product', $productData, array('product_id' => $product->getId()));
         } else {
