@@ -1,6 +1,14 @@
 {% extends "layout.html.twig" %}
 
-{% block title %}Error!{% endblock %}
+{% block menu %}
+{% for category in categories %}
+<li>
+    <a href="/category/{{ category.id }}"><i class=" fa fa-cog "></i>{{ category.name }}</a>
+</li>
+{% endfor %} 
+{% endblock %}
+
+{% block title %}Erreur !{% endblock %}
 
 {% block content %}
 <div class="row" id="errorPanel">
@@ -8,7 +16,7 @@
         <img class="img-responsive pull-right" src="{{ app.request.basepath }}/img/404-ghost.png" alt="Error ghost"/>
     </div>
     <div class="col-xs-6">
-        <h1>Whoops...<br><small>{{ message }}</small></h1>
+        <h1>Ooops...<br><small>{{ message }}</small></h1>
     </div>
 </div>
 {% endblock %}

@@ -10,6 +10,22 @@ use Soundify\Domain\User;
 use Soundify\Form\Type\UserType;
 use Soundify\Domain\ProductCart;
 
+//Error page
+$app->error(function (\Exception $e, $code) use ($app) {
+    $categories = $app['dao.category']->findAll();
+    switch ($code) {
+        case 403:
+            $message = 'Accès refusé.';
+            break;
+        case 404:
+            $message = 'La ressource demandée n\'a pas pu être trouvé.';
+            break;
+        default:
+            $message = "Cette page n'existe pas !";
+    }
+    return $app['twig']->render('error.html.twig', array('message' => $message,'categories' => $categories));
+});
+
 // Home page
 $app->get('/', function (Request $request) use ($app) {
     $categories = $app['dao.category']->findAll();
