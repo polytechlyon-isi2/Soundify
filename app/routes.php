@@ -90,6 +90,7 @@ $app->match('/admin/product/add', function(Request $request) use ($app) {
         if ($productForm->isSubmitted() && $productForm->isValid()) {
             $app['dao.product']->save($product);
             $app['session']->getFlashBag()->add('success', 'Le produit "'. $product->getName() . '" a bien été créé.');
+    return $app->redirect($app['url_generator']->generate('admin'));
         }
         return $app['twig']->render('product_form.html.twig', array(
             'categories' => $categories,
@@ -138,6 +139,7 @@ $app->match('/admin/category/add', function(Request $request) use ($app) {
         {
             $app['dao.category']->save($category);
             $app['session']->getFlashBag()->add('success', 'La catégorie "'. $category->getName() . '" a bien été créée.');
+                return $app->redirect($app['url_generator']->generate('admin'));
         }else{
             $app['session']->getFlashBag()->add('success', 'Une catégorie porte déjà ce nom.');
         }
@@ -201,6 +203,7 @@ $app->match('/admin/user/add', function(Request $request) use ($app) {
             $user->setPassword($password); 
             $app['dao.user']->save($user);
             $app['session']->getFlashBag()->add('success', 'L\'utilisateur "'. $user->getName() . " " . $user->getFirstname() . '" a bien été créé.');
+                return $app->redirect($app['url_generator']->generate('admin'));
         }else{
             $app['session']->getFlashBag()->add('success', 'Cet utilisateur (mail) existe déjà.');
         }
