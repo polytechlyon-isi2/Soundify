@@ -13,6 +13,7 @@ use Soundify\Domain\ProductCart;
 // Home page
 $app->get('/', function (Request $request) use ($app) {
     $categories = $app['dao.category']->findAll();
+    $productRandom = $app['dao.product']->findRandom();
     if($app['user'])
     {
         $number = $app['dao.cart']->getCountByUser($app['user']->getId());
@@ -20,13 +21,14 @@ $app->get('/', function (Request $request) use ($app) {
             'error'         => $app['security.last_error']($request),
             'last_username' => $app['session']->get('_security.last_username'),
             'categories' => $categories,
-            'number' => $number
+            'number' => $number,
+            'productRandom' => $productRandom
         ));
     }
     return $app['twig']->render('index.html.twig', array(
         'error'         => $app['security.last_error']($request),
         'last_username' => $app['session']->get('_security.last_username'),
-        'categories' => $categories
+        'categories' => $categories,
     ));
 
 })->bind('home');
@@ -90,7 +92,7 @@ $app->match('/admin/product/add', function(Request $request) use ($app) {
         if ($productForm->isSubmitted() && $productForm->isValid()) {
             $app['dao.product']->save($product);
             $app['session']->getFlashBag()->add('success', 'Le produit "'. $product->getName() . '" a bien été créé.');
-    return $app->redirect($app['url_generator']->generate('admin'));
+            return $app->redirect($app['url_generator']->generate('admin'));
         }
         return $app['twig']->render('product_form.html.twig', array(
             'categories' => $categories,
@@ -139,7 +141,7 @@ $app->match('/admin/category/add', function(Request $request) use ($app) {
         {
             $app['dao.category']->save($category);
             $app['session']->getFlashBag()->add('success', 'La catégorie "'. $category->getName() . '" a bien été créée.');
-                return $app->redirect($app['url_generator']->generate('admin'));
+            return $app->redirect($app['url_generator']->generate('admin'));
         }else{
             $app['session']->getFlashBag()->add('success', 'Une catégorie porte déjà ce nom.');
         }
@@ -203,7 +205,7 @@ $app->match('/admin/user/add', function(Request $request) use ($app) {
             $user->setPassword($password); 
             $app['dao.user']->save($user);
             $app['session']->getFlashBag()->add('success', 'L\'utilisateur "'. $user->getName() . " " . $user->getFirstname() . '" a bien été créé.');
-                return $app->redirect($app['url_generator']->generate('admin'));
+            return $app->redirect($app['url_generator']->generate('admin'));
         }else{
             $app['session']->getFlashBag()->add('success', 'Cet utilisateur (mail) existe déjà.');
         }

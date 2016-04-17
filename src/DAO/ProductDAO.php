@@ -33,6 +33,37 @@ class ProductDAO extends DAO
         }
         return $products;
     }
+    
+    /**
+     * Returns a product matching the supplied id.
+     *
+     * @param integer $id
+     *
+     * @return \Soundify\Domain\Product|throws an exception if no matching product is found
+     */
+    public function find($id) {
+        $sql = "select * from product where product_id=?";
+        $row = $this->getDb()->fetchAssoc($sql, array($id));
+
+        if ($row)
+            return $this->buildDomainObject($row);
+        else
+            throw new \Exception("No product matching id " . $id);
+    }
+    
+    /**
+     * Returns a random product
+     *
+     *
+     * @return \Soundify\Domain\Product
+     */
+    public function findRandom() {
+        $sql ="select * from product order by rand() limit 1";
+        $row = $this->getDb()->fetchAssoc($sql);
+
+        if ($row)
+            return $this->buildDomainObject($row);
+    }
 
     /**
      * Return a list of all product, sorted by category.
@@ -82,23 +113,6 @@ class ProductDAO extends DAO
         }
 
         return $product;
-    }
-
-    /**
-     * Returns a product matching the supplied id.
-     *
-     * @param integer $id
-     *
-     * @return \Soundify\Domain\Product|throws an exception if no matching product is found
-     */
-    public function find($id) {
-        $sql = "select * from product where product_id=?";
-        $row = $this->getDb()->fetchAssoc($sql, array($id));
-
-        if ($row)
-            return $this->buildDomainObject($row);
-        else
-            throw new \Exception("No product matching id " . $id);
     }
 
     /**
