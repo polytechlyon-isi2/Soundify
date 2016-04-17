@@ -14,21 +14,18 @@
 {% endblock %}
 
 {% block content %}
-<article>
-    <div class="panel panel-info">
-
-        <div class="panel-heading text-center">
-            <div class="panel-title" style=" font-size: 22px;">{{product.name}} <h4 class="text-right"><span class="label label-danger">{{product.price}}€</span> <span class="label label-default"><span class="glyphicon glyphicon-tag"></span> {{product.category}}</span></h4></div>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <img class="col-md-6 img-responsive" src="{{asset('/img/'~product.image)}}"/>
-                <div class="col-md-6 text-right">
-                    <p>{{product.longdescription}}</p>
-                    <a href="/cart/{{product.id}}/add" class="btn btn-danger"><span class="glyphicon glyphicon-plus"></span> Ajouter au panier</a>
-                </div>
+<div class="panel panel-info">
+    <div class="panel-heading text-center">
+        <div class="panel-title" style=" font-size: 22px;">{{product.name}} <h4 class="text-right"><span class="label label-danger">{{product.price}}<span class="glyphicon glyphicon-euro"></span></span> <span class="label label-default"><span class="glyphicon glyphicon-tag"></span> {{product.category}}</span></h4></div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <img class="col-md-6 img-responsive" src="{{asset('/img/'~product.image)}}"/>
+            <div class="col-md-6 text-right">
+                <p>{{product.longdescription}}</p>
+                <a href="/cart/{{product.id}}/add" class="btn btn-danger"><span class="glyphicon glyphicon-plus"></span> Ajouter au panier</a>
             </div>
         </div>
     </div>
-</article>
+</div>
 {% endblock %}
