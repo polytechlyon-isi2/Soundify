@@ -17,8 +17,8 @@
     <h1 class="titre">{{ category.name }}</h1>
     {% set cpt = 1 %}
     {% for product in products %}   
-        {% if cpt%3==0 %}
-        <div class="row">
+    {% if cpt%3==0 %}
+    <div class="row">
         {% endif %}
         <div class="col-md-4">
             <div class="thumbnail text-center">
@@ -32,14 +32,14 @@
             </div>
         </div>
         {% if cpt%3==0 %}
-        </div>
-        {% endif %}
+    </div>
+    {% endif %}
     {% set cpt=cpt+1 %}
     {% else %} 
-        <div class="text-center">
-            <strong>No products yet.</strong> 
-        </div>
-        {% endfor %}
+    <div class="text-center">
+        <strong>Cette catégorie ne possède pas de produit.</strong> 
+    </div>
+    {% endfor %}
     </div>    
 </article>
 {% endblock %}
