@@ -28,16 +28,8 @@ SET time_zone = "+00:00";
 -- ADMIN - USERNAME: admin@admin.com / PASSWORD: admin
 -- USER - USERNAME: jean.dupont@mail.com / PASSWORD: jean
 INSERT INTO `user` (`user_id`, `user_name`, `user_firstname`, `user_address`, `user_zipcode`, `user_mail`, `user_password`, `user_salt`, `user_role`) VALUES
-(1, 'admin', 'admin', 'admin', 'admin', 'admin@admin.com', 'OlRDSIao4xIh3Szea3NRIaOJr5z2/jkdxzBwpxO7s6CkAj3C5HTFQxfqStyjdZTTXQpcU6pWdmnWh4PVtLn++A==', '98a546878f30f2c099a666c', 'ROLE_ADMIN'),
+(1, 'admin', 'admin', 'admin', 'admin', 'admin@admin.com', 'DyR1lx0U8ItVIcFJptOwQOHYwr/N2sNKH02FJAFoSmnm5jwatysmKg1lgcLfMaDSC1wvvtgnNgS6PQ/CBhiXWw==', 'fdba2d3626703a502dbc2fb', 'ROLE_ADMIN'),
 (5, 'Dupont', 'Jean', 'Bâtiment Istil, 15 Boulevard André Latarget, Villeurbanne', '69100', 'jean.dupont@mail.com', 'demsY6j3EZ7pNxDZCLdBHovs8Um2fFjfZ3UYP/oBe2KK200aSAIM1iNRjPEd2u3magutfAdg5LAGqpeUAHM5PA==', '80e72cadaa3dbc65ca8eb3e', 'ROLE_USER');
-
---
--- Contenu de la table `cart`
---
-
-INSERT INTO `cart` (`cart_product`, `cart_user`, `cart_count`) VALUES
-(2, 1, 1),
-(3, 1, 3);
 
 --
 -- Contenu de la table `category`
