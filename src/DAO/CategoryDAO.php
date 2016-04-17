@@ -57,11 +57,11 @@ class CategoryDAO extends DAO
     }
     
     /**
-     * Returns a category matching the supplied name.
+     * Returns a category or null
      *
      * @param string $name
      *
-     * @return \Soundify\Domain\Category|throws an exception if no matching category is found
+     * @return \Soundify\Domain\Category
      */
     public function exist($category) {
         $sql = "select * from category where category_name=?";

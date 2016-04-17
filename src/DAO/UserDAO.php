@@ -44,6 +44,23 @@ class UserDAO extends DAO implements UserProviderInterface
         }
         return $entities;
     }
+    
+    /**
+     * Returns a user or null
+     *
+     * @param string $name
+     *
+     * @return \Soundify\Domain\User
+     */
+    public function exist($user) {
+        $sql = "select * from user where user_mail=?";
+        $row = $this->getDb()->fetchAssoc($sql, array($user->getUsername()));
+
+        if ($row)
+            return $this->buildDomainObject($row);
+        else
+            return null;
+    }
 
     /**
      * {@inheritDoc}
