@@ -10,4 +10,4 @@ Soundify est un site de vente d'objets connectés en lien avec la musique.
 > Soundify/db/content.sql
 
 ## Lien OpenShift
-> http://soundify-corentinmar.rhcloud.com/
+> http://soundify-corentinmar.rhcloud.com/web/
