@@ -4,7 +4,7 @@
 {% block menu %}
 {% for category in categories %}
 <li>
-    <a href="category/{{ category.id }}"><i class=" fa fa-cog "></i>{{ category.name }}</a>
+    <a href="{{ path('category', {'id': category.id}) }}"><i class=" fa fa-cog "></i>{{ category.name }}</a>
 </li>
 {% endfor %} 
 {% endblock %}

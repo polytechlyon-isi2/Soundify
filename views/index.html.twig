@@ -1,9 +1,9 @@
-{% extends "layout.html.twig" %} {% block title %}Home{% endblock %}
+{% extends "layout.html.twig" %} {% block title %}Accueil{% endblock %}
 
 {% block menu %} 
 {% for category in categories %}
 <li>
-    <a href="category/{{ category.id }}"><i class=" fa fa-cog "></i>{{ category.name }}</a>
+    <a href="{{ path('category', {'id': category.id}) }}"><i class=" fa fa-cog "></i>{{ category.name }}</a>
 </li>
 {% endfor %}
 {% endblock %} 
@@ -36,7 +36,7 @@
                                 <img class="col-md-6 img-responsive" src="{{asset('/img/'~productRandom.image)}}"/>
                                 <div class="col-md-6 text-right">
                                     <p>{{productRandom.shortdescription|truncate(150)}}</p>
-                                    <a href="/product/{{productRandom.id}}" class="btn btn-danger"><span class="glyphicon glyphicon-eye-open"></span> Voir le produit</a>
+                                    <a href="{{ path('product', {'id': productRandom.id}) }}" class="btn btn-danger"><span class="glyphicon glyphicon-eye-open"></span> Voir le produit</a>
                                 </div>
                             </div>
                         </div>
@@ -134,13 +134,13 @@
         {% if category.id==1 %}
         <div class="item active">
             <div class="col-md-3">
-                <a href="/category/{{ category.id }}"><h4 class="well text-center">{{ category.name }}</h4></a>
+                <a href="{{ path('category', {'id': category.id}) }}"><h4 class="well text-center">{{ category.name }}</h4></a>
             </div>
         </div>
         {% else %}
         <div class="item">
             <div class="col-md-3">
-                <a href="/category/{{ category.id }}"><h4 class="well text-center">{{ category.name }}</h4></a>
+                <a href="{{ path('category', {'id': category.id}) }}"><h4 class="well text-center">{{ category.name }}</h4></a>
             </div>
         </div>
         {% endif %}

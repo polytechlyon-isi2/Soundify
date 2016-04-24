@@ -1,10 +1,10 @@
 {% extends "layout.html.twig" %} 
-{% block title %}Home{% endblock %}
+{% block title %}{{product.name}}{% endblock %}
 
 {% block menu %}
 {% for category in categories %}
 <li>
-    <a href="category/{{ category.id }}"><i class=" fa fa-cog "></i>{{ category.name }}</a>
+    <a href="{{ path('category', {'id': category.id}) }}"><i class=" fa fa-cog "></i>{{ category.name }}</a>
 </li>
 {% endfor %} 
 {% endblock %}
@@ -23,7 +23,7 @@
             <img class="col-md-6 img-responsive" src="{{asset('/img/'~product.image)}}"/>
             <div class="col-md-6 text-right">
                 <p>{{product.longdescription}}</p>
-                <a href="/cart/{{product.id}}/add" class="btn btn-danger"><span class="glyphicon glyphicon-plus"></span> Ajouter au panier</a>
+                <a href="{{ path('add_product_cart', {'id': product.id}) }}" class="btn btn-danger"><span class="glyphicon glyphicon-plus"></span> Ajouter au panier</a>
             </div>
         </div>
     </div>
